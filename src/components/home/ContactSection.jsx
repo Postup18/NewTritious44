@@ -3,9 +3,9 @@ import { motion } from "framer-motion";
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
 
 const contactInfo = [
-  { icon: Phone, label: "Phone", value: "+1 (555) 123-4567" },
-  { icon: Mail, label: "Email", value: "hello@nourishnutrition.com" },
-  { icon: MapPin, label: "Location", value: "123 Wellness Ave, Suite 200" },
+  { icon: Phone, label: "Phone", value: "786-853-6259" },
+  { icon: Mail, label: "Email", value: "Newtritious.life@gmail.com" },
+  { icon: MapPin, label: "Location", value: "Bay Harbor Islands, FL" },
   { icon: Clock, label: "Hours", value: "Mon–Fri: 9am – 6pm" },
 ];
 
