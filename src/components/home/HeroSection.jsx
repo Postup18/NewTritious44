@@ -37,10 +37,19 @@ export default function HeroSection() {
           transition={{ duration: 0.8, delay: 0.4 }}
           className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold text-white leading-tight"
         >
+          NewTritious Life
+        </motion.h1>
+
+        <motion.h2
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.5 }}
+          className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold text-white leading-tight mt-2"
+        >
           Nourish Your Body,
           <br />
           <span className="italic font-normal">Transform Your Life</span>
-        </motion.h1>
+        </motion.h2>
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}
