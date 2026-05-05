@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Utensils, Activity, Scale, Apple } from "lucide-react";
+import { Utensils, Activity, Scale, Apple, Pill, FlaskConical } from "lucide-react";
 
 const services = [
   {
@@ -27,6 +27,18 @@ const services = [
     description:
       "Proactive nutrition strategies to boost energy, improve gut health, and support long-term wellbeing.",
   },
+  {
+    icon: Pill,
+    title: "Supplements",
+    description:
+      "Personalized supplement recommendations based on your health goals, lab results, and dietary gaps — no guesswork.",
+  },
+  {
+    icon: FlaskConical,
+    title: "Lab Tests",
+    description:
+      "Comprehensive lab test reviews and functional testing to uncover nutritional deficiencies and root causes.",
+  },
 ];
 
 export default function ServicesSection() {
@@ -52,7 +64,7 @@ export default function ServicesSection() {
           </p>
         </motion.div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((service, i) => (
             <motion.div
               key={i}
