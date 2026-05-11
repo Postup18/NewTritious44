@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Menu, X, Leaf } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 const navLinks = [
   { label: "Home", href: "#hero" },
@@ -14,6 +15,7 @@ const navLinks = [
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -55,7 +57,7 @@ export default function Navbar() {
             </button>
           ))}
           <button
-            onClick={() => scrollTo("#contact")}
+            onClick={() => navigate("/book-session")}
             className="bg-primary text-primary-foreground px-5 py-2 rounded-full text-sm font-body font-medium hover:opacity-90 transition-opacity"
           >
             Book a Session
@@ -88,7 +90,7 @@ export default function Navbar() {
                 </button>
               ))}
               <button
-                onClick={() => scrollTo("#contact")}
+                onClick={() => navigate("/book-session")}
                 className="bg-primary text-primary-foreground px-5 py-3 rounded-full text-sm font-body font-medium mt-2"
               >
                 Book a Session

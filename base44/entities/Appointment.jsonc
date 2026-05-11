@@ -1,0 +1,47 @@
+{
+  "name": "Appointment",
+  "type": "object",
+  "properties": {
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "The date of the appointment"
+    },
+    "time_slot": {
+      "type": "string",
+      "description": "The time slot for the appointment (e.g. '9:00 AM')"
+    },
+    "client_name": {
+      "type": "string",
+      "description": "Full name of the client"
+    },
+    "client_email": {
+      "type": "string",
+      "description": "Email address of the client"
+    },
+    "client_phone": {
+      "type": "string",
+      "description": "Phone number of the client (optional)"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Any additional notes from the client"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "confirmed",
+        "cancelled"
+      ],
+      "default": "pending",
+      "description": "Status of the appointment"
+    }
+  },
+  "required": [
+    "date",
+    "time_slot",
+    "client_name",
+    "client_email"
+  ]
+}
