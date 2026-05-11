@@ -41,11 +41,19 @@ export default function BookSession() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
+    const dateFormatted = format(selectedDate, "EEEE, MMMM d, yyyy");
     await base44.entities.Appointment.create({
       date: format(selectedDate, "yyyy-MM-dd"),
       time_slot: selectedSlot,
       ...form,
       status: "pending",
+    });
+    // Send confirmation email to client
+    await base44.integrations.Core.SendEmail({
+      to: form.client_email,
+      from_name: "NewTritious Life",
+      subject: `Your Session is Confirmed — ${dateFormatted} at ${selectedSlot}`,
+      body: `Hi ${form.client_name},\n\nThank you for booking a session with NewTritious Life!\n\nHere are your appointment details:\n📅 Date: ${dateFormatted}\n🕐 Time: ${selectedSlot}\n⏱ Duration: 50 minutes\n\nIf you have any questions or need to reschedule, please reach out:\n📞 786-853-6259\n📧 Newtritious.life@gmail.com\n\nLooking forward to speaking with you!\n\nWarm regards,\nYael\nNewTritious Life`,
     });
     setSubmitting(false);
     setSubmitted(true);
