@@ -48,15 +48,15 @@ export default function BookSession() {
       ...form,
       status: "pending",
     });
-    // Send confirmation email to client
-    await base44.integrations.Core.SendEmail({
+    setSubmitting(false);
+    setSubmitted(true);
+    // Send confirmation email non-blocking (after showing confirmation)
+    base44.integrations.Core.SendEmail({
       to: form.client_email,
       from_name: "NewTritious Life",
       subject: `Your Session is Confirmed — ${dateFormatted} at ${selectedSlot}`,
       body: `Hi ${form.client_name},\n\nThank you for booking a session with NewTritious Life!\n\nHere are your appointment details:\n📅 Date: ${dateFormatted}\n🕐 Time: ${selectedSlot}\n⏱ Duration: 50 minutes\n\nIf you have any questions or need to reschedule, please reach out:\n📞 786-853-6259\n📧 Newtritious.life@gmail.com\n\nLooking forward to speaking with you!\n\nWarm regards,\nYael\nNewTritious Life`,
-    });
-    setSubmitting(false);
-    setSubmitted(true);
+    }).catch(console.error);
   };
 
   const scrollTo = (href) => {
