@@ -48,6 +48,10 @@ export default function BookSession() {
       ...form,
       status: "pending",
     });
+    // Register the client as a user in the app
+    await base44.users.inviteUser(form.client_email, "user").catch(() => {
+      // Silently ignore if user already exists
+    });
     // Send notification email to Yael only (Base44 can only email registered app users)
     await base44.integrations.Core.SendEmail({
       to: "Newtritious.life@gmail.com",
