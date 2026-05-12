@@ -48,22 +48,23 @@ export default function BookSession() {
       ...form,
       status: "pending",
     });
+    // Send both emails and wait for them
+    await Promise.all([
+      base44.integrations.Core.SendEmail({
+        to: form.client_email,
+        from_name: "NewTritious Life",
+        subject: `Your Session is Confirmed — ${dateFormatted} at ${selectedSlot}`,
+        body: `Hi ${form.client_name},\n\nThank you for booking a session with NewTritious Life!\n\nHere are your appointment details:\n📅 Date: ${dateFormatted}\n🕐 Time: ${selectedSlot}\n⏱ Duration: 50 minutes\n\nIf you have any questions or need to reschedule, please reach out:\n📞 786-853-6259\n📧 Newtritious.life@gmail.com\n\nLooking forward to speaking with you!\n\nWarm regards,\nYael\nNewTritious Life`,
+      }),
+      base44.integrations.Core.SendEmail({
+        to: "Newtritious.life@gmail.com",
+        from_name: "NewTritious Life Booking",
+        subject: `New Appointment Request — ${dateFormatted} at ${selectedSlot}`,
+        body: `Hi Yael,\n\nYou have a new appointment request!\n\n📅 Date: ${dateFormatted}\n🕐 Time: ${selectedSlot}\n\nClient Details:\n👤 Name: ${form.client_name}\n📧 Email: ${form.client_email}${form.client_phone ? `\n📞 Phone: ${form.client_phone}` : ""}${form.notes ? `\n📝 Notes: ${form.notes}` : ""}\n\nLog in to your dashboard to confirm or manage this appointment.\n\nNewTritious Life Booking System`,
+      }),
+    ]);
     setSubmitting(false);
     setSubmitted(true);
-    // Send confirmation email to client (non-blocking)
-    base44.integrations.Core.SendEmail({
-      to: form.client_email,
-      from_name: "NewTritious Life",
-      subject: `Your Session is Confirmed — ${dateFormatted} at ${selectedSlot}`,
-      body: `Hi ${form.client_name},\n\nThank you for booking a session with NewTritious Life!\n\nHere are your appointment details:\n📅 Date: ${dateFormatted}\n🕐 Time: ${selectedSlot}\n⏱ Duration: 50 minutes\n\nIf you have any questions or need to reschedule, please reach out:\n📞 786-853-6259\n📧 Newtritious.life@gmail.com\n\nLooking forward to speaking with you!\n\nWarm regards,\nYael\nNewTritious Life`,
-    }).catch(console.error);
-    // Send notification email to Yael (non-blocking)
-    base44.integrations.Core.SendEmail({
-      to: "Newtritious.life@gmail.com",
-      from_name: "NewTritious Life Booking",
-      subject: `New Appointment Request — ${dateFormatted} at ${selectedSlot}`,
-      body: `Hi Yael,\n\nYou have a new appointment request!\n\n📅 Date: ${dateFormatted}\n🕐 Time: ${selectedSlot}\n\nClient Details:\n👤 Name: ${form.client_name}\n📧 Email: ${form.client_email}${form.client_phone ? `\n📞 Phone: ${form.client_phone}` : ""}${form.notes ? `\n📝 Notes: ${form.notes}` : ""}\n\nLog in to your dashboard to confirm or manage this appointment.\n\nNewTritious Life Booking System`,
-    }).catch(console.error);
   };
 
   const scrollTo = (href) => {
