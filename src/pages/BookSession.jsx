@@ -48,17 +48,14 @@ export default function BookSession() {
       ...form,
       status: "pending",
     });
-    // Register the client as a user in the app
-    await base44.users.inviteUser(form.client_email, "user").catch(() => {
-      // Silently ignore if user already exists
-    });
-    // Send notification email to Yael only (Base44 can only email registered app users)
-    await base44.integrations.Core.SendEmail({
+    // Fire-and-forget: invite client + notify Yael (may fail for unauthenticated users)
+    base44.users.inviteUser(form.client_email, "user").catch(() => {});
+    base44.integrations.Core.SendEmail({
       to: "Newtritious.life@gmail.com",
       from_name: "NewTritious Life Booking",
       subject: `New Appointment Request — ${dateFormatted} at ${selectedSlot}`,
       body: `Hi Yael,\n\nYou have a new appointment request!\n\n📅 Date: ${dateFormatted}\n🕐 Time: ${selectedSlot}\n\nClient Details:\n👤 Name: ${form.client_name}\n📧 Email: ${form.client_email}${form.client_phone ? `\n📞 Phone: ${form.client_phone}` : ""}${form.notes ? `\n📝 Notes: ${form.notes}` : ""}\n\nNewTritious Life Booking System`,
-    });
+    }).catch(() => {});
     setSubmitting(false);
     setSubmitted(true);
   };
