@@ -330,14 +330,26 @@ export default function BookSession() {
 
     const dateFormatted = format(selectedDate, "EEEE, MMMM d, yyyy");
 
-    // Fire-and-forget notifications
+    // Invite the client so they become a registered user (enables future emails to them)
     base44.users.inviteUser(form.client_email, "user").catch(() => {});
+
+    // NOTE: SendEmail only works for registered app users.
+    // Yael must be invited & registered at Newtritious.life@gmail.com for this to deliver.
+    // The invite for the client above also enables their confirmation email below once registered.
     base44.integrations.Core.SendEmail({
       to: "Newtritious.life@gmail.com",
       from_name: "NewTritious Life Booking",
       subject: `New Booking: ${form.client_name} — ${dateFormatted} at ${selectedSlot}`,
       body: `New Booking Alert:\n\n${form.client_name} has scheduled a session for ${dateFormatted} at ${selectedSlot}.\nEmail: ${form.client_email}\nGoal: ${form.notes || "Not specified"}`,
-    }).catch(() => {});
+    }).catch((err) => console.warn("Admin email failed (user may not be registered):", err));
+
+    // Send confirmation to client (works once they accept their invite and register)
+    base44.integrations.Core.SendEmail({
+      to: form.client_email,
+      from_name: "NewTritious Life",
+      subject: `Your nutrition session is confirmed — ${dateFormatted}`,
+      body: `Hi ${form.client_name},\n\nYour nutrition session is set! We'll see you on ${dateFormatted} at ${selectedSlot}.\n\nIf you have any questions before your session, feel free to reach out.\n\nLooking forward to meeting you!\n\nYael\nNewTritious Life`,
+    }).catch((err) => console.warn("Client email failed (user may not be registered):", err));
 
     // 1.5s processing state
     await new Promise((r) => setTimeout(r, 1500));
