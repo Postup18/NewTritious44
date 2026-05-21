@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Utensils, Activity, Scale, Apple, Pill, FlaskConical } from "lucide-react";
 
@@ -13,7 +13,8 @@ const services = [
   icon: Activity,
   title: "Medical Nutrition Therapy",
   description:
-  "Evidence-based dietary management for diabetes, heart disease, digestive disorders, and other chronic conditions."
+  "Targeted, evidence-based medical nutrition therapy for a wide range of chronic conditions such as diabetes, heart disease, digestive issues, autoimmune disorders, and kidney health. Our approach focuses on managing symptoms, preventing complications, and supporting your overall health.",
+  truncateAt: 110
 },
 {
   icon: Scale,
@@ -40,6 +41,26 @@ const services = [
   "Comprehensive lab test reviews and functional testing to uncover nutritional deficiencies and root causes."
 }];
 
+
+function ServiceDescription({ description, truncateAt }) {
+  const [expanded, setExpanded] = useState(false);
+  if (!truncateAt || expanded) {
+    return (
+      <p className="font-body text-sm text-muted-foreground leading-relaxed">
+        {description}{" "}
+        {truncateAt && (
+          <button onClick={() => setExpanded(false)} className="text-primary underline hover:opacity-80 text-sm">see less</button>
+        )}
+      </p>
+    );
+  }
+  return (
+    <p className="font-body text-sm text-muted-foreground leading-relaxed">
+      {description.slice(0, truncateAt).trimEnd()}{"... "}
+      <button onClick={() => setExpanded(true)} className="text-primary underline hover:opacity-80 text-sm">see more</button>
+    </p>
+  );
+}
 
 export default function ServicesSection() {
   return (
@@ -80,9 +101,7 @@ export default function ServicesSection() {
               <h3 className="font-heading text-lg font-semibold text-foreground mb-3">
                 {service.title}
               </h3>
-              <p className="font-body text-sm text-muted-foreground leading-relaxed">
-                {service.description}
-              </p>
+              <ServiceDescription description={service.description} truncateAt={service.truncateAt} />
             </motion.div>
           )}
         </div>
