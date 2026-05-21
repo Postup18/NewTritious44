@@ -33,7 +33,7 @@ export default function AboutSection() {
           >
             <div className="relative rounded-2xl overflow-hidden aspect-[3/4] shadow-2xl">
               <img
-                src="https://media.base44.com/images/public/69f267852d1729cd58c3d853/c868cf545_generated_9069d9ba.png"
+                src="https://media.base44.com/images/public/69f267852d1729cd58c3d853/e8b45a4a4_YaelsPhoto.jpg"
                 alt="Professional dietitian portrait"
                 className="w-full h-full object-cover"
               />
