@@ -15,12 +15,18 @@ export default function Footer() {
             © {new Date().getFullYear()} Nourish Nutrition. All rights reserved.
           </p>
 
-          <div className="flex items-center gap-6">
+          <div className="flex flex-wrap items-center gap-6">
             <a href="#" className="font-body text-xs text-background/50 hover:text-background transition-colors">
               Privacy Policy
             </a>
             <a href="#" className="font-body text-xs text-background/50 hover:text-background transition-colors">
               Terms
+            </a>
+            <a href="#" className="font-body text-xs text-background/50 hover:text-background transition-colors">
+              Medical Disclaimer
+            </a>
+            <a href="#" className="font-body text-xs text-background/50 hover:text-background transition-colors">
+              Refund Policy
             </a>
           </div>
         </div>
