@@ -14,9 +14,9 @@ export default function Footer() {
           </p>
 
           <div className="flex flex-wrap items-center gap-6">
-            <a href="#" className="font-body text-xs text-background/50 hover:text-background transition-colors">
+            <Link to="/privacy-policy" className="font-body text-xs text-background/50 hover:text-background transition-colors">
               Privacy Policy
-            </a>
+            </Link>
             <a href="#" className="font-body text-xs text-background/50 hover:text-background transition-colors">
               Terms
             </a>

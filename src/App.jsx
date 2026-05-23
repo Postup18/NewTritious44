@@ -8,6 +8,7 @@ import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import Home from './pages/Home';
 import BookSession from './pages/BookSession';
 import MedicalDisclaimer from './pages/MedicalDisclaimer';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 import RefundPolicy from './pages/RefundPolicy';
 // Add page imports here
 
@@ -40,6 +41,7 @@ const AuthenticatedApp = () => {
       <Route path="/" element={<Home />} />
       <Route path="/book-session" element={<BookSession />} />
       <Route path="/medical-disclaimer" element={<MedicalDisclaimer />} />
+      <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       <Route path="/refund-policy" element={<RefundPolicy />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
