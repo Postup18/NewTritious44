@@ -7,6 +7,8 @@ import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import Home from './pages/Home';
 import BookSession from './pages/BookSession';
+import MedicalDisclaimer from './pages/MedicalDisclaimer';
+import RefundPolicy from './pages/RefundPolicy';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -37,6 +39,8 @@ const AuthenticatedApp = () => {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/book-session" element={<BookSession />} />
+      <Route path="/medical-disclaimer" element={<MedicalDisclaimer />} />
+      <Route path="/refund-policy" element={<RefundPolicy />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

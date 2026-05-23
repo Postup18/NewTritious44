@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Leaf } from "lucide-react";
 
 export default function Footer() {
@@ -22,12 +23,12 @@ export default function Footer() {
             <a href="#" className="font-body text-xs text-background/50 hover:text-background transition-colors">
               Terms
             </a>
-            <a href="#" className="font-body text-xs text-background/50 hover:text-background transition-colors">
+            <Link to="/medical-disclaimer" className="font-body text-xs text-background/50 hover:text-background transition-colors">
               Medical Disclaimer
-            </a>
-            <a href="#" className="font-body text-xs text-background/50 hover:text-background transition-colors">
+            </Link>
+            <Link to="/refund-policy" className="font-body text-xs text-background/50 hover:text-background transition-colors">
               Refund Policy
-            </a>
+            </Link>
           </div>
         </div>
       </div>
