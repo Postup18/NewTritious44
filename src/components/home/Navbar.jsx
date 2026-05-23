@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Menu, X, Leaf } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
@@ -38,12 +38,7 @@ export default function Navbar() {
       }`}
     >
       <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-        <button onClick={() => scrollTo("#hero")} className="flex items-center gap-2 group">
-          <Leaf className="w-6 h-6 text-primary transition-transform group-hover:rotate-12" />
-          <span className="font-heading text-xl font-semibold text-foreground tracking-wide">
-            Nourish
-          </span>
-        </button>
+
 
         {/* Desktop */}
         <div className="hidden md:flex items-center gap-8">
