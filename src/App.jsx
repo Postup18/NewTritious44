@@ -10,6 +10,7 @@ import BookSession from './pages/BookSession';
 import MedicalDisclaimer from './pages/MedicalDisclaimer';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import RefundPolicy from './pages/RefundPolicy';
+import IntakeChat from './pages/IntakeChat';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -43,6 +44,7 @@ const AuthenticatedApp = () => {
       <Route path="/medical-disclaimer" element={<MedicalDisclaimer />} />
       <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       <Route path="/refund-policy" element={<RefundPolicy />} />
+      <Route path="/intake" element={<IntakeChat />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
