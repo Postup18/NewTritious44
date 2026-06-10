@@ -79,6 +79,7 @@ export default function IntakeChat() {
       <div className="text-center py-6 px-4">
         <p className="font-body text-sm text-muted-foreground max-w-sm mx-auto">
           Chat with our intake assistant to prepare for your first session with Yael.
+          <br />Type <span className="font-medium text-foreground">"I'm ready to start"</span> to begin.
         </p>
       </div>
 
