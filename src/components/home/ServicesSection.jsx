@@ -7,7 +7,8 @@ const services = [
   icon: Utensils,
   title: "Personalized Meal Plans",
   description:
-  "Custom nutrition plans designed around your lifestyle, preferences, and health goals — no cookie-cutter diets."
+  "Custom nutrition plans designed around your lifestyle, preferences, and health goals — no cookie-cutter diets.",
+  truncateAt: 70
 },
 {
   icon: Activity,
@@ -20,25 +21,29 @@ const services = [
   icon: Scale,
   title: "Weight Management",
   description:
-  "A balanced, sustainable approach to reaching and maintaining your ideal weight without restrictive dieting."
+  "A balanced, sustainable approach to reaching and maintaining your ideal weight without restrictive dieting.",
+  truncateAt: 70
 },
 {
   icon: Apple,
   title: "Wellness & Prevention",
   description:
-  "Proactive nutrition strategies to boost energy, improve gut health, and support long-term wellbeing."
+  "Proactive nutrition strategies to boost energy, improve gut health, and support long-term wellbeing.",
+  truncateAt: 70
 },
 {
   icon: Pill,
   title: "Supplements",
   description:
-  "Personalized supplement recommendations based on your health goals, lab results, and dietary gaps — no guesswork."
+  "Personalized supplement recommendations based on your health goals, lab results, and dietary gaps — no guesswork.",
+  truncateAt: 70
 },
 {
   icon: FlaskConical,
   title: "Lab Tests",
   description:
-  "Comprehensive lab test reviews and functional testing to uncover nutritional deficiencies and root causes."
+  "Comprehensive lab test reviews and functional testing to uncover nutritional deficiencies and root causes.",
+  truncateAt: 70
 }];
 
 
