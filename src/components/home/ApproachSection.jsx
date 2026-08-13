@@ -1,6 +1,5 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Check } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const steps = [
@@ -85,7 +84,7 @@ export default function ApproachSection() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8 }}
-            className="relative md:mt-96"
+            className="relative md:mt-[30rem]"
           >
             <div className="rounded-2xl overflow-hidden shadow-2xl">
               <img
@@ -94,26 +93,10 @@ export default function ApproachSection() {
                 className="w-full h-full object-cover"
               />
             </div>
-            {/* Floating card */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.5, duration: 0.6 }}
-              className="absolute -bottom-6 -left-6 bg-card rounded-xl shadow-lg p-5 border border-border/50"
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                  <Check className="w-5 h-5 text-primary" />
-                </div>
-                <div>
-                  <p className="font-heading text-sm font-semibold text-foreground">98% of clients</p>
-                  <p className="font-body text-xs text-muted-foreground">reach their goals</p>
-                </div>
-              </div>
-            </motion.div>
-            {/* Schedule button */}
-            <div className="mt-10 flex justify-center">
+            <p className="font-heading text-lg font-semibold text-foreground text-center mt-6">
+              Yael Laniado, RD
+            </p>
+            <div className="mt-4 flex justify-center">
               <button
                 onClick={() => navigate("/book-session")}
                 className="px-8 py-3.5 rounded-full font-body font-medium text-sm text-white transition-all duration-300 hover:opacity-90 shadow-lg"
