@@ -37,9 +37,11 @@ export default function ApproachSection() {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.7 }}
           >
-            <p className="font-body text-sm tracking-[0.2em] uppercase text-primary mb-4">
-              My Approach
-            </p>
+            <img
+              src="https://media.base44.com/images/public/69f267852d1729cd58c3d853/fa15b275c_image.png"
+              alt="Yael's nutrition approach"
+              className="rounded-2xl w-full mb-6"
+            />
             <h2 className="font-heading text-3xl md:text-4xl font-semibold text-foreground leading-snug">
               A Process Built <br />
               <span className="italic font-normal">Around You</span>
