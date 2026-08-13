@@ -1,28 +1,29 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Award, GraduationCap, Heart } from "lucide-react";
+import { GraduationCap, Award, Heart } from "lucide-react";
 
 const credentials = [
-  { icon: GraduationCap, text: "M.Sc. in Clinical Nutrition" },
-  { icon: Award, text: "12+ Years of Experience" },
-  { icon: Heart, text: "500+ Clients Helped" },
+  { icon: GraduationCap, text: "Master's Degree in Dietetics & Nutrition", bg: "#A6B4A6", iconColor: "#ffffff" },
+  { icon: Award, text: "20 Years of Experience", bg: "#E6D6CE", iconColor: "#ffffff" },
+  { icon: Heart, text: "500+ Lives Transformed", bg: "#C2C8B5", iconColor: "#ffffff" },
 ];
 
 const bioParagraphs = [
-  `As a registered dietitian, I've had the opportunity to work across many settings in the field—from clinical roles in hospitals and long-term care facilities to outpatient nutrition counseling for weight management, and intuitive eating.`,
-  `My passion for nutrition became deeply personal in 2017, when I began experiencing recurrent kidney stones—a painful and often misunderstood condition that can significantly affect quality of life. After multiple episodes, I dove into research and applied my professional knowledge to modify my hydration, dietary patterns, and lifestyle. Through targeted changes in fluid intake, calcium and oxalate balance, sodium reduction, and overall nutrient timing, I was able to reduce my stone risk and regain control of my health. This journey gave me a firsthand understanding of how powerful—and necessary—personalized nutrition can be, especially when dealing with chronic or recurring conditions.`,
-  `My approach is both personalized and evidence based. I take a comprehensive look at the full picture—using functional and conventional lab testing, detailed nutrient assessments, supplement and medication reviews, and lifestyle evaluations to uncover root causes rather than just treating symptoms.`,
-  `Clients often come to me tired of food rules, restriction, and being told what not to eat. Here, we do things differently. At NewTritious Life, we believe food should nourish your body and your life. We believe that progress isn't measured by perfection, and that real change happens when we combine science with self-compassion.`,
-  `When we work together, you'll gain more than just a meal plan. You'll gain tools, insights, and a partnership rooted in education, empathy, and achievable action steps. You'll walk away feeling more confident in your choices and more in control of your health.`,
-  `To help you get started and make sure we're a great fit, I offer complimentary 15-minute discovery calls for all new clients.`,
+  `As a Registered Dietitian with 20 years of experience, I've worked across many settings—from clinical hospital care to one-on-one coaching for weight management, wellness, and intuitive eating.`,
+  `My passion became deeply personal in 2017 when I developed painful, recurrent kidney stones. Honestly, it was frustrating and humbling. Even as a nutrition expert, I felt completely stuck and wondered why this was happening when I thought I was doing everything right.`,
+  `It was a huge wake-up call. I realized generic "healthy eating" wasn't enough—my body needed a custom approach. By digging into the science and rethinking my daily routine, I stopped the cycle and regained control of my health.`,
+  `That journey proved to me how powerful personalized care really is. Today, whether you're managing a health condition or building sustainable habits, I bring both clinical expertise and true empathy to help you thrive.`,
 ];
 
 export default function AboutSection() {
   return (
-    <section id="about" className="py-24 md:py-32 bg-background">
-      <div className="max-w-6xl mx-auto px-6">
-        {/* Top two-column: image + intro */}
-        <div className="grid md:grid-cols-2 gap-12 md:gap-20 items-center">
+    <section id="about" className="py-24 md:py-32 relative overflow-hidden" style={{ backgroundColor: "#F5F5F0" }}>
+      {/* Watercolor accents */}
+      <div className="absolute top-0 left-0 w-72 h-72 rounded-full pointer-events-none" style={{ background: "#D5E0D5", opacity: 0.3, filter: "blur(60px)" }} />
+      <div className="absolute bottom-0 right-0 w-96 h-96 rounded-full pointer-events-none" style={{ background: "#D5E0D5", opacity: 0.25, filter: "blur(80px)" }} />
+
+      <div className="relative max-w-6xl mx-auto px-6">
+        <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
           {/* Image */}
           <motion.div
             initial={{ opacity: 0, x: -40 }}
@@ -34,76 +35,64 @@ export default function AboutSection() {
             <div className="relative rounded-2xl overflow-hidden aspect-[3/4] shadow-2xl">
               <img
                 src="https://media.base44.com/images/public/69f267852d1729cd58c3d853/e8b45a4a4_YaelsPhoto.jpg"
-                alt="Professional dietitian portrait"
+                alt="Yael — Registered Dietitian"
                 className="w-full h-full object-cover"
               />
             </div>
-            <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-accent rounded-2xl -z-10" />
-            <div className="absolute -top-4 -left-4 w-24 h-24 border-2 border-primary/20 rounded-2xl -z-10" />
+            <div className="absolute -bottom-4 -right-4 w-32 h-32 rounded-2xl -z-10" style={{ backgroundColor: "#A6B4A6", opacity: 0.4 }} />
+            <div className="absolute -top-4 -left-4 w-24 h-24 border-2 rounded-2xl -z-10" style={{ borderColor: "#A6B4A6", opacity: 0.3 }} />
           </motion.div>
 
-          {/* Intro text + credentials */}
+          {/* Text + Badges */}
           <motion.div
             initial={{ opacity: 0, x: 40 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8 }}
           >
-            <p className="font-body text-sm tracking-[0.2em] uppercase text-primary mb-4">
+            <p className="font-body text-sm tracking-[0.2em] uppercase mb-4" style={{ color: "#87a96b" }}>
               About Me
             </p>
-            <h2 className="font-heading text-3xl md:text-4xl font-semibold text-foreground leading-snug">
+            <h2 className="font-heading text-3xl md:text-4xl font-semibold leading-snug" style={{ color: "#2D2D2D" }}>
               Hi, I'm Yael — <br />
-              <span className="italic font-normal text-primary">your nutrition partner</span>
+              <span className="italic font-normal">your science-based nutrition partner</span>
             </h2>
-            <p className="font-body text-muted-foreground mt-6 leading-relaxed">
-              {bioParagraphs[0]}
-            </p>
-            <p className="font-body text-muted-foreground mt-4 leading-relaxed">
-              {bioParagraphs[1]}
-            </p>
 
-            <div className="mt-8 flex flex-col gap-4">
+            {bioParagraphs.map((para, i) => (
+              <p
+                key={i}
+                className="font-body mt-4 leading-relaxed"
+                style={{ color: "#4A4A4A" }}
+              >
+                {para}
+              </p>
+            ))}
+
+            {/* Horizontal credential badges */}
+            <div className="mt-10 flex flex-row gap-4 justify-start">
               {credentials.map((item, i) => (
-                <div key={i} className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-accent flex items-center justify-center flex-shrink-0">
-                    <item.icon className="w-5 h-5 text-primary" />
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.5, delay: 0.1 * i }}
+                  className="flex-1 flex flex-col items-center text-center"
+                >
+                  <div
+                    className="w-16 h-16 rounded-full flex items-center justify-center mb-3"
+                    style={{ backgroundColor: item.bg }}
+                  >
+                    <item.icon className="w-7 h-7" style={{ color: item.iconColor }} />
                   </div>
-                  <span className="font-body text-sm font-medium text-foreground">{item.text}</span>
-                </div>
+                  <span className="font-body text-xs font-medium leading-tight" style={{ color: "#4A4A4A" }}>
+                    {item.text}
+                  </span>
+                </motion.div>
               ))}
             </div>
           </motion.div>
         </div>
-
-        {/* Remaining bio paragraphs */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.7 }}
-          className="mt-14 max-w-3xl"
-        >
-          {bioParagraphs.slice(2, 6).map((para, i) => (
-            <p key={i} className="font-body text-muted-foreground mt-4 leading-relaxed">
-              {para}
-            </p>
-          ))}
-        </motion.div>
-
-        {/* Approach callout */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.7, delay: 0.1 }}
-          className="mt-10 bg-accent rounded-2xl p-8 border border-primary/10 max-w-3xl"
-        >
-          <p className="font-body text-xs tracking-[0.2em] uppercase text-primary mb-3">Approach</p>
-          <p className="font-body text-foreground leading-relaxed">
-            I help adults cut through the noise of nutrition confusion with a realistic, root-cause approach—no guilt, no guesswork. Whether you're navigating hormonal changes, preventing kidney stones, or just want to feel better in your body, I combine science, empathy, and practical tools to guide you. Let's make food work for your life—not the other way around.
-          </p>
-        </motion.div>
       </div>
     </section>
   );
