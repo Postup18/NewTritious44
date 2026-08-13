@@ -50,9 +50,6 @@ export default function AboutSection() {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8 }}
           >
-            <p className="font-body text-sm tracking-[0.2em] uppercase mb-4" style={{ color: "#87a96b" }}>
-              About Me
-            </p>
             <h2 className="font-heading text-3xl md:text-4xl font-semibold leading-snug" style={{ color: "#2D2D2D" }}>
               Hi, I'm Yael — <br />
               <span className="italic font-normal">your science-based nutrition partner</span>
