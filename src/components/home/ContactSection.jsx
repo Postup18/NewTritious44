@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Phone, Mail, MapPin, Clock, ShieldCheck } from "lucide-react";
 
 const contactInfo = [
-  { icon: Phone, label: "Phone", value: "786-853-6259" },
+  { icon: Phone, label: "Phone", value: "786-519-1550" },
   { icon: Mail, label: "Email", value: "Newtritious.life@gmail.com" },
   { icon: MapPin, label: "Location", value: "Virtual Sessions Only (Licensed in FL, TX, KY, IL & GA)" },
   { icon: ShieldCheck, label: "Insurance", value: "In-network with most major insurances (Superbills provided for out-of-network)" },
