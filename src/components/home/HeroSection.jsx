@@ -31,7 +31,7 @@ export default function HeroSection() {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="font-body text-sm tracking-[0.3em] uppercase text-white/80 mb-6"
         >
-          Clinical Dietitian · Personalized Nutrition
+          Registered Dietitian · Personalized Nutrition
         </motion.p>
 
         <motion.h1
@@ -60,8 +60,17 @@ export default function HeroSection() {
           transition={{ duration: 0.8, delay: 0.6 }}
           className="font-body text-base sm:text-lg text-white/85 mt-6 max-w-xl mx-auto leading-relaxed"
         >
-          Evidence-based nutritional guidance tailored to your unique needs.
-          One-on-one sessions designed to help you build lasting, healthy habits.
+          Stop guessing what works for your body. Get expert 1-on-1 guidance to
+          build realistic habits, clear the confusion, and achieve lasting results.
+        </motion.p>
+
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.7 }}
+          className="font-body text-sm sm:text-base text-white/85 mt-4 max-w-xl mx-auto leading-relaxed"
+        >
+          🌿 100% Virtual Sessions • Licensed in FL, TX, KY, IL & GA • Most Insurances Accepted
         </motion.p>
 
         <motion.div
