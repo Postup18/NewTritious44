@@ -6,19 +6,19 @@ const testimonials = [
   {
     name: "Rachel M.",
     role: "Weight Management Client",
-    text: "Sarah completely changed how I think about food. For the first time, I feel in control — not restricted. I've lost 15 kg and actually enjoy eating more than ever.",
+    text: "Yael completely changed how I think about food. For the first time, I feel in control — not restricted. I've lost 15 kg and actually enjoy eating more than ever.",
     stars: 5,
   },
   {
     name: "David K.",
     role: "Diabetes Management",
-    text: "My blood sugar levels have never been this stable. Sarah's approach is so practical and easy to follow. I wish I had found her years ago.",
+    text: "My blood sugar levels have never been this stable. Yael's approach is so practical and easy to follow. I wish I had found her years ago.",
     stars: 5,
   },
   {
     name: "Lina T.",
     role: "Wellness Client",
-    text: "I came in feeling exhausted all the time. Within weeks of following Sarah's plan, my energy skyrocketed. She truly listens and cares about your progress.",
+    text: "I came in feeling exhausted all the time. Within weeks of following Yael's plan, my energy skyrocketed. She truly listens and cares about your progress.",
     stars: 5,
   },
 ];
