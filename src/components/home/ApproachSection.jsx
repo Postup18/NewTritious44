@@ -121,7 +121,7 @@ export default function ApproachSection() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8 }}
-            className="relative md:mt-[30rem]"
+            className="relative md:mt-0"
           >
             <div className="rounded-2xl overflow-hidden shadow-2xl">
               <img
