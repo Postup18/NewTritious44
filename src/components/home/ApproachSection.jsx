@@ -49,6 +49,29 @@ export default function ApproachSection() {
   return (
     <section id="approach" className="py-24 md:py-32 bg-background">
       <div className="max-w-6xl mx-auto px-6">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-16">
+          {approachPillars.map((pillar, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.5, delay: i * 0.1 }}
+              className="bg-card rounded-2xl p-6 border border-border/50 shadow-sm"
+            >
+              <div className="w-10 h-10 rounded-full bg-accent flex items-center justify-center mb-4">
+                <pillar.icon className="w-5 h-5 text-primary" />
+              </div>
+              <h3 className="font-heading text-lg font-semibold text-foreground mb-2">
+                {pillar.title}
+              </h3>
+              <p className="font-body text-sm text-muted-foreground leading-relaxed">
+                {pillar.desc}
+              </p>
+            </motion.div>
+          ))}
+        </div>
+
         <div className="grid md:grid-cols-2 gap-12 md:gap-20 items-start">
           {/* Left text */}
           <motion.div
@@ -57,28 +80,6 @@ export default function ApproachSection() {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.7 }}
           >
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-10">
-              {approachPillars.map((pillar, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-60px" }}
-                  transition={{ duration: 0.5, delay: i * 0.1 }}
-                  className="bg-card rounded-2xl p-5 border border-border/50 shadow-sm"
-                >
-                  <div className="w-9 h-9 rounded-full bg-accent flex items-center justify-center mb-3">
-                    <pillar.icon className="w-4 h-4 text-primary" />
-                  </div>
-                  <h3 className="font-heading text-base font-semibold text-foreground mb-2">
-                    {pillar.title}
-                  </h3>
-                  <p className="font-body text-sm text-muted-foreground leading-relaxed">
-                    {pillar.desc}
-                  </p>
-                </motion.div>
-              ))}
-            </div>
             <h2 className="font-heading text-3xl md:text-4xl font-semibold text-foreground leading-snug">
               A Process Built <br />
               <span className="italic font-normal">Around You</span>
