@@ -382,6 +382,16 @@ export default function BookSession() {
       {/* Page title — only shown on selection step */}
       {step === "selection" && (
         <div className="text-center py-12 px-6">
+          <div className="flex items-center justify-center gap-2 mb-3">
+            <span className="text-sm text-gray-500">Before booking please check my Intake Form</span>
+            <button
+              onClick={() => navigate("/intake")}
+              className="inline-flex items-center gap-1 text-xs font-semibold px-4 py-2 rounded-full border transition-all"
+              style={{ color: "#87a96b", borderColor: "#87a96b" }}
+            >
+              🌿 Start Intake Form
+            </button>
+          </div>
           <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "#87a96b" }}>
             Schedule Online
           </p>

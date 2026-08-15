@@ -86,12 +86,6 @@ export default function HeroSection() {
             Book Your Consultation
           </button>
           <button
-            onClick={() => navigate("/intake")}
-            className="bg-white/15 border border-white/40 text-white px-8 py-3.5 rounded-full font-body font-medium text-sm hover:bg-white/25 transition-all duration-300"
-          >
-            🌿 Start Intake Form
-          </button>
-          <button
             onClick={() => scrollTo("#about")}
             className="border border-white/40 text-white px-8 py-3.5 rounded-full font-body font-medium text-sm hover:bg-white/10 transition-all duration-300"
           >
