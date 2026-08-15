@@ -123,12 +123,16 @@ export default function ApproachSection() {
             transition={{ duration: 0.8 }}
             className="relative md:mt-0"
           >
-            <div className="rounded-2xl overflow-hidden shadow-2xl">
+            <div className="rounded-2xl overflow-hidden shadow-2xl relative">
               <img
                 src="https://media.base44.com/images/public/69f267852d1729cd58c3d853/1cea11f69_generated_f7e2299e.png"
                 alt="Person holding a healthy colorful meal bowl"
                 className="w-full h-full object-cover"
               />
+              <div className="absolute bottom-4 left-4 bg-primary/90 text-primary-foreground rounded-xl px-5 py-3 shadow-lg">
+                <p className="font-heading text-2xl font-semibold leading-tight">98%</p>
+                <p className="font-body text-sm leading-tight">of clients reach their goals</p>
+              </div>
             </div>
             <p className="font-heading text-lg font-semibold text-foreground text-center mt-6">
               Yael Laniado, RD
@@ -142,6 +146,9 @@ export default function ApproachSection() {
                 Schedule 15-Min Call
               </button>
             </div>
+            <p className="font-body text-sm text-muted-foreground leading-relaxed text-center mt-5 max-w-xs mx-auto">
+              I help adults cut through the noise of nutrition confusion with a realistic, root-cause approach—no guilt, no guesswork.
+            </p>
           </motion.div>
         </div>
       </div>
