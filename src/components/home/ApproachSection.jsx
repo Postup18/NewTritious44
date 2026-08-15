@@ -1,6 +1,25 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { Search, Heart, Compass } from "lucide-react";
+
+const approachPillars = [
+  {
+    icon: Search,
+    title: "Root-Cause Investigation",
+    desc: "We look at the full picture—using functional and conventional labs, nutrient assessments, and lifestyle reviews to address why you feel this way, not just mask symptoms.",
+  },
+  {
+    icon: Heart,
+    title: "No-Guilt Philosophy",
+    desc: "Tired of strict food rules and restriction? We focus on nourishing your body. Progress over perfection, combining evidence-based science with self-compassion.",
+  },
+  {
+    icon: Compass,
+    title: "Practical Tools for Life",
+    desc: "You get much more than a meal plan. Walk away with clear insights, actionable strategies, and the confidence to take control of your health.",
+  },
+];
 
 const steps = [
   {
@@ -38,11 +57,28 @@ export default function ApproachSection() {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.7 }}
           >
-            <img
-              src="https://media.base44.com/images/public/69f267852d1729cd58c3d853/fa15b275c_image.png"
-              alt="Yael's nutrition approach"
-              className="rounded-2xl w-full mb-6"
-            />
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-10">
+              {approachPillars.map((pillar, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-60px" }}
+                  transition={{ duration: 0.5, delay: i * 0.1 }}
+                  className="bg-card rounded-2xl p-5 border border-border/50 shadow-sm"
+                >
+                  <div className="w-9 h-9 rounded-full bg-accent flex items-center justify-center mb-3">
+                    <pillar.icon className="w-4 h-4 text-primary" />
+                  </div>
+                  <h3 className="font-heading text-base font-semibold text-foreground mb-2">
+                    {pillar.title}
+                  </h3>
+                  <p className="font-body text-sm text-muted-foreground leading-relaxed">
+                    {pillar.desc}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
             <h2 className="font-heading text-3xl md:text-4xl font-semibold text-foreground leading-snug">
               A Process Built <br />
               <span className="italic font-normal">Around You</span>
