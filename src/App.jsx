@@ -11,6 +11,7 @@ import MedicalDisclaimer from './pages/MedicalDisclaimer';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import RefundPolicy from './pages/RefundPolicy';
 import IntakeChat from './pages/IntakeChat';
+import YaelBotChat from './pages/YaelBotChat';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -45,6 +46,7 @@ const AuthenticatedApp = () => {
       <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       <Route path="/refund-policy" element={<RefundPolicy />} />
       <Route path="/intake" element={<IntakeChat />} />
+      <Route path="/yael-bot" element={<YaelBotChat />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
