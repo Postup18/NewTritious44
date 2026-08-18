@@ -30,8 +30,7 @@ export default function ContactSection() {
               <span className="italic font-normal">Your Journey?</span>
             </h2>
             <p className="font-body text-muted-foreground mt-6 leading-relaxed">
-              Book a free discovery call or send me a message. I'd love to hear about
-              your goals and see how I can help you feel your best.
+              Have a question or want to learn more? Send me a message and I'll get back to you within 24 hours.
             </p>
 
             <div className="mt-10 space-y-5">
