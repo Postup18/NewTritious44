@@ -86,10 +86,10 @@ export default function HeroSection() {
             Book Your Consultation
           </button>
           <button
-            onClick={() => scrollTo("#about")}
+            onClick={() => scrollTo("#services")}
             className="border border-white/40 text-white px-8 py-3.5 rounded-full font-body font-medium text-sm hover:bg-white/10 transition-all duration-300"
           >
-            Learn More
+            View Services
           </button>
         </motion.div>
       </div>
