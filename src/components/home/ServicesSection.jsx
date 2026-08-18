@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { Utensils, HeartPulse, Scale, Leaf, FlaskConical, Pill } from "lucide-react";
 
 const services = [
@@ -187,6 +188,7 @@ function ServiceCard({ service, index }) {
 }
 
 export default function ServicesSection() {
+  const navigate = useNavigate();
   return (
     <section id="services" className="py-24 md:py-32 bg-secondary/50">
       <div className="max-w-6xl mx-auto px-6 bg-[hsl(var(--secondary))]">
@@ -214,6 +216,24 @@ export default function ServicesSection() {
             <ServiceCard key={i} service={service} index={i} />
           ))}
         </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.6 }}
+          className="text-center mt-14"
+        >
+          <p className="font-heading text-lg text-foreground mb-5">
+            Unsure? Book a 15-Min Call
+          </p>
+          <button
+            onClick={() => navigate("/book-session")}
+            className="bg-primary text-primary-foreground px-8 py-3.5 rounded-full font-body font-medium text-sm hover:opacity-90 transition-all duration-300 shadow-lg"
+          >
+            Free 15-Min
+          </button>
+        </motion.div>
       </div>
     </section>
   );
