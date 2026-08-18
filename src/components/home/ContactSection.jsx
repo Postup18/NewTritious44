@@ -5,7 +5,7 @@ import { Phone, Mail, MapPin, Clock, ShieldCheck } from "lucide-react";
 const contactInfo = [
   { icon: Phone, label: "Phone", value: "786-519-1550" },
   { icon: Mail, label: "Email", value: "Newtritious.life@gmail.com" },
-  { icon: MapPin, label: "Location", value: "Virtual Sessions Only (Licensed in FL, TX, KY, IL & GA)" },
+  { icon: MapPin, label: "Location", value: "100% Virtual Sessions (Primary clinical licenses in FL, TX, KY, IL & GA). Not in one of these states? Send a message to see if we can support your location!" },
   { icon: ShieldCheck, label: "Insurance", value: "In-network with most major insurances (Superbills provided for out-of-network)" },
   { icon: Clock, label: "Hours", value: "Mon–Fri: 9am – 6pm" },
 ];
