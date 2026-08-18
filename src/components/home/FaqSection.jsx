@@ -6,27 +6,42 @@ const faqs = [
   {
     question: "Do you accept insurance?",
     answer:
-      "Yes. I am in-network with most major insurance plans. For plans I'm not in-network with, I provide detailed superbills you can submit to your insurer for potential out-of-network reimbursement. Reach out and I'll help verify your specific coverage.",
+      "Yes. I am in-network with most major insurance plans. For plans I'm not in-network with, I provide detailed superbills you can submit to your insurer for potential out-of-network reimbursement. To make this seamless, your insurance details and a photo of your card are collected securely right at booking so I can verify your coverage in advance.",
   },
   {
     question: "How do virtual sessions work?",
     answer:
-      "All sessions are 100% virtual, conducted through a secure video platform from the comfort of your home or office. After you book, you'll receive a link by email. Sessions are 50 minutes, and everything you need—your plan, resources, and follow-ups—is delivered digitally. I am licensed to see clients in FL, TX, KY, IL, and GA.",
+      "All sessions are 100% virtual, conducted through a secure video platform from the comfort of your home or office. Sessions are 50 minutes, and everything you need—your plan, resources, and follow-ups—is delivered digitally. I am officially licensed in Florida, Texas, Kentucky, Illinois, and Georgia. Depending on your location and state regulations, I may also be able to work with clients in other states—feel free to reach out to check eligibility!",
   },
   {
     question: "Do I need a referral to book a session?",
     answer:
-      "No referral is needed to get started. You can book a free 15-minute discovery call directly, and we'll determine together whether a full nutrition consultation is the right next step for you. If your physician recommends specific lab work, I'm happy to collaborate with your care team.",
+      "No referral is needed to get started. You can book an initial consultation directly, or schedule a free 15-minute discovery call if you're unsure which path is right for you. If your physician recommends specific lab work, I'm happy to collaborate with your care team.",
   },
   {
     question: "What happens after I book?",
     answer:
-      "Once your session is confirmed, you'll receive a welcome email with your video link and a short intake form to complete beforehand. This helps me understand your goals, history, and preferences so our first session is productive from minute one.",
+      "Once you select your time, your session is reserved. You will receive a welcome email with your payment instructions (via Venmo or Zelle) and a link to complete your quick intake form. Once your payment is verified, your official confirmation is sent, and your secure Google Meet video link will arrive in your 24-hour reminder email.",
+  },
+  {
+    question: "How do I pay for my session?",
+    answer:
+      "For self-pay clients, I accept secure and fee-free transfers via Venmo (@NewTritious-Life) and Zelle (ylaniado@hotmail.com). Payment details and instructions are provided immediately upon booking. If you are using insurance, your coverage details will be verified according to your plan.",
+  },
+  {
+    question: "What is your cancellation, reschedule, and refund policy?",
+    answer:
+      "• More than 24 Hours (Free): You can easily reschedule or cancel your appointment free of charge up to 24 hours before your scheduled session using the link provided in your email.\n• Less than 24 Hours & No-Shows (Penalty): Because your time slot is reserved exclusively for you, cancellations made less than 24 hours in advance, or missed appointments without notice, are subject to a $75 late cancellation fee.\n• Refunds: Session fees are non-refundable once the appointment has taken place. If you prepay via Venmo or Zelle and cancel with more than 24 hours' notice, a full refund will be promptly issued.",
+  },
+  {
+    question: "Do you recommend supplements or labs?",
+    answer:
+      "Yes! I partner with Fullscript to provide you with direct, professional-grade supplement dispensing shipped right to your door. If needed, I can also order and coordinate specialized lab testing to tailor your nutrition plan even further.",
   },
   {
     question: "How many sessions will I need?",
     answer:
-      "It depends on your goals. Some clients need a single targeted consultation, while others benefit from ongoing monthly support. We'll map out a plan together during your discovery call—there's never pressure to commit to a long package upfront.",
+      "It depends on your goals. Some clients need a single targeted consultation, while others benefit from ongoing monthly support. We'll map out a plan together—there's never pressure to commit to a long package upfront.",
   },
 ];
 
@@ -63,7 +78,7 @@ function FaqItem({ item, index, isOpen, onToggle }) {
             transition={{ duration: 0.3 }}
             className="overflow-hidden"
           >
-            <p className="font-body text-sm text-muted-foreground leading-relaxed px-6 pb-6">
+            <p className="font-body text-sm text-muted-foreground leading-relaxed px-6 pb-6 whitespace-pre-line">
               {item.answer}
             </p>
           </motion.div>
