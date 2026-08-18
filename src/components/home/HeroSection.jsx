@@ -70,7 +70,7 @@ export default function HeroSection() {
           transition={{ duration: 0.8, delay: 0.7 }}
           className="font-body text-sm sm:text-base text-white/85 mt-4 max-w-xl mx-auto leading-relaxed"
         >
-          🌿 100% Virtual Sessions • Licensed in FL, TX, KY, IL & GA • Most Insurances Accepted
+          🌿 100% Virtual Sessions • Licensed & Telehealth Certified • Most Insurances Accepted
         </motion.p>
 
         <motion.div
