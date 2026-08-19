@@ -31,6 +31,15 @@
       "type": "string",
       "description": "Any additional notes from the client"
     },
+    "appointment_type": {
+      "type": "string",
+      "enum": [
+        "session",
+        "free_call"
+      ],
+      "default": "session",
+      "description": "Whether this is a paid session or a free 15-min discovery call"
+    },
     "status": {
       "type": "string",
       "enum": [

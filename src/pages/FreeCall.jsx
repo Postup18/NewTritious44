@@ -338,6 +338,7 @@ export default function FreeCall() {
       client_email: form.client_email,
       client_phone: form.client_phone,
       client_state: form.client_state,
+      appointment_type: "free_call",
       status: "pending",
     });
 

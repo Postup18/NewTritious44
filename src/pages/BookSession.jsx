@@ -351,6 +351,7 @@ export default function BookSession() {
       client_email: form.client_email,
       client_phone: form.client_phone,
       client_state: form.client_state,
+      appointment_type: "session",
       status: "pending",
     });
 
@@ -369,13 +370,9 @@ export default function BookSession() {
       body: `New Booking Alert:\n\n${form.client_name} has scheduled a session for ${dateFormatted} at ${selectedSlot}.\nEmail: ${form.client_email}\nPhone: ${form.client_phone}\nState: ${form.client_state}`,
     }).catch((err) => console.warn("Admin email failed (user may not be registered):", err));
 
-    // Send confirmation to client (works once they accept their invite and register)
-    base44.integrations.Core.SendEmail({
-      to: form.client_email,
-      from_name: "NewTritious Life",
-      subject: `Your nutrition session is confirmed — ${dateFormatted}`,
-      body: `Hi ${form.client_name},\n\nYour consultation slot is reserved for ${dateFormatted} at ${selectedSlot}!\n\n1. Payment Instructions: Please complete your payment to finalize your booking:\n  • Venmo: @NewTritious-Life\n  • Zelle: ylaniado@hotmail.com (Please include your full name in the payment memo)\n\n2. Your Intake Form\nTo help me prepare for our time together, please complete your health history intake form here: 🔗 https://nurture-flow-diet.base44.app/intake\n\n3. Need to Change Your Time?\nIf you need to adjust or cancel your reservation, you can send us an email: Newtritious.life@gmail.com (Note: Cancellations or reschedules made less than 24 hours before your session are subject to a $75 fee).\n\nWhat happens next?\nOnce your payment is processed, your session is officially confirmed! You will receive a separate reminder email 24 hours before our meeting that will include your secure Google Meet video link.\n\nIf you have any questions, feel free to reply to this email. I look forward to working with you!\n\nWarmly,\nYael Laniado, RD\nNewTritious Life LLC`,
-    }).catch((err) => console.warn("Client email failed (user may not be registered):", err));
+    // NOTE: The confirmation email is sent automatically by the "Send Booking Confirmation"
+    // workflow once the client accepts their invite and registers. It cannot be sent here
+    // because the client is not a registered user yet at booking time.
 
     // 1.5s processing state
     await new Promise((r) => setTimeout(r, 1500));
