@@ -21,7 +21,11 @@
     },
     "client_phone": {
       "type": "string",
-      "description": "Phone number of the client (optional)"
+      "description": "Phone number of the client"
+    },
+    "client_state": {
+      "type": "string",
+      "description": "State where the client is located (for licensure verification)"
     },
     "notes": {
       "type": "string",

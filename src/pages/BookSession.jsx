@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Calendar as CalendarIcon, Clock, CheckCircle, Leaf, ArrowLeft, User, Mail, Target } from "lucide-react";
+import { Calendar as CalendarIcon, Clock, CheckCircle, Leaf, ArrowLeft, User, Mail, Phone, MapPin } from "lucide-react";
 import { format, isBefore, startOfDay, isSameDay } from "date-fns";
 import { base44 } from "@/api/base44Client";
 import { Calendar } from "@/components/ui/calendar";
@@ -24,7 +24,7 @@ function SelectionStep({ onConfirm }) {
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [bookedSlots, setBookedSlots] = useState([]);
   const [loadingSlots, setLoadingSlots] = useState(false);
-  const [form, setForm] = useState({ client_name: "", client_email: "", notes: "" });
+  const [form, setForm] = useState({ client_name: "", client_email: "", client_phone: "", client_state: "" });
 
   const handleDateSelect = async (date) => {
     if (!date) return;
@@ -38,7 +38,7 @@ function SelectionStep({ onConfirm }) {
   };
 
   const canSubmit =
-    selectedDate && selectedSlot && form.client_name.trim() && form.client_email.trim();
+    selectedDate && selectedSlot && form.client_name.trim() && form.client_email.trim() && form.client_phone.trim() && form.client_state.trim();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -181,15 +181,32 @@ function SelectionStep({ onConfirm }) {
             </div>
 
             <div>
-              <label className="block text-xs text-gray-500 uppercase tracking-wider mb-1.5 font-medium flex items-center gap-1">
-                <Target className="w-3 h-3 inline" /> Health Goals <span className="text-gray-400 normal-case font-normal">(optional)</span>
+              <label className="block text-xs text-gray-500 uppercase tracking-wider mb-1.5 font-medium">
+                Telephone <span style={{ color: "#87a96b" }}>*</span>
               </label>
-              <textarea
-                rows={4}
-                value={form.notes}
-                onChange={(e) => setForm({ ...form, notes: e.target.value })}
-                placeholder="What are you hoping to achieve? (e.g. weight management, better energy, managing a condition...)"
-                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none transition-all bg-gray-50 focus:bg-white resize-none"
+              <input
+                type="tel"
+                required
+                value={form.client_phone}
+                onChange={(e) => setForm({ ...form, client_phone: e.target.value })}
+                placeholder="+1 (555) 000-0000"
+                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none transition-all bg-gray-50 focus:bg-white"
+                onFocus={(e) => (e.target.style.borderColor = "#87a96b")}
+                onBlur={(e) => (e.target.style.borderColor = "#e5e7eb")}
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs text-gray-500 uppercase tracking-wider mb-1.5 font-medium">
+                State <span style={{ color: "#87a96b" }}>*</span>
+              </label>
+              <input
+                type="text"
+                required
+                value={form.client_state}
+                onChange={(e) => setForm({ ...form, client_state: e.target.value })}
+                placeholder="e.g. FL"
+                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none transition-all bg-gray-50 focus:bg-white"
                 onFocus={(e) => (e.target.style.borderColor = "#87a96b")}
                 onBlur={(e) => (e.target.style.borderColor = "#e5e7eb")}
               />
@@ -281,6 +298,14 @@ function ConfirmationStep({ selectedDate, selectedSlot, form, onReset }) {
               <Mail className="w-4 h-4 flex-shrink-0" style={{ color: "#87a96b" }} />
               <span className="text-sm text-gray-700">{form.client_email}</span>
             </div>
+            <div className="flex items-center gap-3">
+              <Phone className="w-4 h-4 flex-shrink-0" style={{ color: "#87a96b" }} />
+              <span className="text-sm text-gray-700">{form.client_phone}</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <MapPin className="w-4 h-4 flex-shrink-0" style={{ color: "#87a96b" }} />
+              <span className="text-sm text-gray-700">{form.client_state}</span>
+            </div>
           </div>
 
           <p className="text-xs text-gray-400 mb-6">
@@ -324,7 +349,8 @@ export default function BookSession() {
       time_slot: selectedSlot,
       client_name: form.client_name,
       client_email: form.client_email,
-      notes: form.notes,
+      client_phone: form.client_phone,
+      client_state: form.client_state,
       status: "pending",
     });
 
@@ -340,7 +366,7 @@ export default function BookSession() {
       to: "Newtritious.life@gmail.com",
       from_name: "NewTritious Life Booking",
       subject: `New Booking: ${form.client_name} — ${dateFormatted} at ${selectedSlot}`,
-      body: `New Booking Alert:\n\n${form.client_name} has scheduled a session for ${dateFormatted} at ${selectedSlot}.\nEmail: ${form.client_email}\nGoal: ${form.notes || "Not specified"}`,
+      body: `New Booking Alert:\n\n${form.client_name} has scheduled a session for ${dateFormatted} at ${selectedSlot}.\nEmail: ${form.client_email}\nPhone: ${form.client_phone}\nState: ${form.client_state}`,
     }).catch((err) => console.warn("Admin email failed (user may not be registered):", err));
 
     // Send confirmation to client (works once they accept their invite and register)
