@@ -80,10 +80,10 @@ export default function HeroSection() {
           className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
         >
           <button
-            onClick={() => navigate("/book-session")}
+            onClick={() => navigate("/free-call")}
             className="bg-primary text-primary-foreground px-8 py-3.5 rounded-full font-body font-medium text-sm hover:opacity-90 transition-all duration-300 shadow-lg"
           >
-            Book Your Consultation
+            Unsure? Book a 15-Min Call
           </button>
           <button
             onClick={() => scrollTo("#services")}
