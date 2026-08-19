@@ -8,11 +8,13 @@ import TestimonialsSection from "../components/home/TestimonialsSection";
 import FaqSection from "../components/home/FaqSection";
 import ContactSection from "../components/home/ContactSection";
 import Footer from "../components/home/Footer";
+import BookingNextSteps from "../components/home/BookingNextSteps";
 
 export default function Home() {
   return (
     <div className="font-body">
       <Navbar />
+      <BookingNextSteps />
       <HeroSection />
       <AboutSection />
       <ServicesSection />
