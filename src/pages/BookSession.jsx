@@ -274,13 +274,9 @@ function ConfirmationStep({ selectedDate, selectedSlot, form, onReset }) {
 
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}>
           <h2 className="font-heading text-2xl font-semibold text-gray-900 mb-2">You're all set!</h2>
-          <p className="text-gray-500 text-sm mb-4 leading-relaxed">
-            Your session is reserved! To complete your booking, please check your
-            inbox for an invitation email and complete your registration.
-          </p>
           <p className="text-gray-500 text-sm mb-8 leading-relaxed">
-            Once registered, you'll automatically receive a confirmation email with
-            payment instructions, your intake form link, and session details.
+            A confirmation email with payment instructions and your intake form link
+            is on its way to <strong>{form.client_email}</strong>. Check your inbox to finalize your booking.
           </p>
 
           {/* Summary card */}
@@ -362,8 +358,38 @@ export default function BookSession() {
 
     const dateFormatted = format(selectedDate, "EEEE, MMMM d, yyyy");
 
-    // Invite the client — they must accept the invite & register to receive the confirmation email
-    base44.users.inviteUser(form.client_email, "user").catch(() => {});
+    // Send immediate booking confirmation to the client
+    const confirmBody = `Hi ${form.client_name},
+
+Your consultation slot is reserved for ${dateFormatted} at ${selectedSlot}!
+
+1. Payment Instructions: Please complete your payment to finalize your booking:
+• Venmo: @NewTritious-Life
+• Zelle: ylaniado@hotmail.com (Please include your full name in the payment memo)
+
+2. Your Intake Form
+To help me prepare for our time together, please complete your health history intake form here:
+https://nurture-flow-diet.base44.app/intake
+
+3. Need to Change Your Time?
+If you need to adjust or cancel your reservation, you can email to: Newtritious.life@gmail.com
+(Note: Cancellations or reschedules made less than 24 hours before your session are subject to a $75 fee).
+
+What happens next?
+Once your payment is processed, your session is officially confirmed! You will receive a separate reminder email 24 hours before our meeting that will include your secure Google Meet video link.
+
+If you have any questions, feel free to reply to this email. I look forward to working with you!
+
+Warmly,
+Yael Laniado, RD
+NewTritious Life LLC`;
+
+    base44.integrations.Core.SendEmail({
+      to: form.client_email,
+      from_name: "Newtritious",
+      subject: "Your Session is Confirmed! – Preparation Details & Links",
+      body: confirmBody,
+    }).catch((err) => console.warn("Client confirmation email failed:", err));
 
     // Notify Yael of the new booking
     base44.integrations.Core.SendEmail({
@@ -372,11 +398,6 @@ export default function BookSession() {
       subject: `New Booking: ${form.client_name} — ${dateFormatted} at ${selectedSlot}`,
       body: `New Booking Alert:\n\n${form.client_name} has scheduled a session for ${dateFormatted} at ${selectedSlot}.\nEmail: ${form.client_email}\nPhone: ${form.client_phone}\nState: ${form.client_state}`,
     }).catch((err) => console.warn("Admin email failed:", err));
-
-    // NOTE: The full confirmation email (with payment instructions, intake link, and policy)
-    // is sent automatically by the "Send Booking Confirmation" workflow once the client
-    // accepts their invite and registers. It cannot be sent at booking time because the
-    // client is not a registered user yet.
 
     // 1.5s processing state
     await new Promise((r) => setTimeout(r, 1500));
