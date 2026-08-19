@@ -274,8 +274,13 @@ function ConfirmationStep({ selectedDate, selectedSlot, form, onReset }) {
 
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}>
           <h2 className="font-heading text-2xl font-semibold text-gray-900 mb-2">You're all set!</h2>
+          <p className="text-gray-500 text-sm mb-4 leading-relaxed">
+            Your session is reserved! To complete your booking, please check your
+            inbox for an invitation email and complete your registration.
+          </p>
           <p className="text-gray-500 text-sm mb-8 leading-relaxed">
-            Your nutrition session is confirmed. We'll see you soon!
+            Once registered, you'll automatically receive a confirmation email with
+            payment instructions, your intake form link, and session details.
           </p>
 
           {/* Summary card */}
@@ -357,10 +362,10 @@ export default function BookSession() {
 
     const dateFormatted = format(selectedDate, "EEEE, MMMM d, yyyy");
 
-    // Invite the client so they can access the app later (optional, not required for email)
+    // Invite the client — they must accept the invite & register to receive the confirmation email
     base44.users.inviteUser(form.client_email, "user").catch(() => {});
 
-    // Notify Yael of the new booking (sent server-side via backend function)
+    // Notify Yael of the new booking
     base44.integrations.Core.SendEmail({
       to: "Newtritious.life@gmail.com",
       from_name: "NewTritious Life Booking",
@@ -368,10 +373,10 @@ export default function BookSession() {
       body: `New Booking Alert:\n\n${form.client_name} has scheduled a session for ${dateFormatted} at ${selectedSlot}.\nEmail: ${form.client_email}\nPhone: ${form.client_phone}\nState: ${form.client_state}`,
     }).catch((err) => console.warn("Admin email failed:", err));
 
-    // Send the full confirmation email to the customer immediately (server-side, no registration needed)
-    base44.functions.sendBookingConfirmation({ email: form.client_email }).catch((err) =>
-      console.warn("Confirmation email failed:", err)
-    );
+    // NOTE: The full confirmation email (with payment instructions, intake link, and policy)
+    // is sent automatically by the "Send Booking Confirmation" workflow once the client
+    // accepts their invite and registers. It cannot be sent at booking time because the
+    // client is not a registered user yet.
 
     // 1.5s processing state
     await new Promise((r) => setTimeout(r, 1500));

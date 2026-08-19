@@ -1,0 +1,39 @@
+{
+  "name": "Send Booking Confirmation",
+  "description": "Sends the booking confirmation email with payment and intake details when a new client accepts their invite and registers",
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "app_user_auth",
+      "events": [
+        "signup"
+      ]
+    }
+  },
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "send_booking_confirmation",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "send_confirmation": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "sendBookingConfirmation",
+            "args": {
+              "email": "${ .trigger.email }"
+            }
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Send booking confirmation email",
+            "description": "Looks up the client's appointment and emails confirmation details"
+          }
+        }
+      }
+    ]
+  }
+}
