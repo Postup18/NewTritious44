@@ -40,26 +40,37 @@ export default async function(req: Request): Promise<Response> {
 
     const emailBody = `Hi ${appt.client_name},
 
-Your consultation slot is reserved for ${dateFormatted} at ${appt.time_slot}!
+    Your nutrition consultation is reserved for ${dateFormatted} at ${appt.time_slot}.
+    To finalize your booking, please complete these 2 steps:
 
-1. Payment Instructions: Please complete your payment to finalize your booking:
-  • Venmo: @NewTritious-Life
-  • Zelle: ylaniado@hotmail.com (Please include your full name in the payment memo)
+    ━━━━━━━━━━━━━━━━━━━━━━━━━
+    STEP 1 — Complete Your Payment
+    ━━━━━━━━━━━━━━━━━━━━━━━━━
+    Please send your session payment using one of the methods below:
+    • Venmo: @NewTritious-Life
+    • Zelle: ylaniado@hotmail.com
+    (Please include your full name in the payment memo)
 
-2. Your Intake Form
-To help me prepare for our time together, please complete your health history intake form here: 🔗 https://nurture-flow-diet.base44.app/intake
+    ━━━━━━━━━━━━━━━━━━━━━━━━━
+    STEP 2 — Fill Out Your Intake Form
+    ━━━━━━━━━━━━━━━━━━━━━━━━━
+    To help me prepare for our time together, complete your health history intake form here:
+    🔗 https://nurture-flow-diet.base44.app/intake
 
-3. Need to Change Your Time?
-If you need to adjust or cancel your reservation, you can send us an email: Newtritious.life@gmail.com (Note: Cancellations or reschedules made less than 24 hours before your session are subject to a $75 fee).
+    ━━━━━━━━━━━━━━━━━━━━━━━━━
+    Need to Change Your Time?
+    ━━━━━━━━━━━━━━━━━━━━━━━━━
+    Email Newtritious.life@gmail.com to adjust or cancel your reservation.
+    (Note: Cancellations or reschedules made less than 24 hours before your session are subject to a $75 fee.)
 
-What happens next?
-Once your payment is processed, your session is officially confirmed! You will receive a separate reminder email 24 hours before our meeting that will include your secure Google Meet video link.
+    What happens next?
+    Once your payment is processed, your session is officially confirmed! You'll receive a separate reminder email 24 hours before our meeting with your secure Google Meet video link.
 
-If you have any questions, feel free to reply to this email. I look forward to working with you!
+    If you have any questions, feel free to reply to this email. I look forward to working with you!
 
-Warmly,
-Yael Laniado, RD
-NewTritious Life LLC`;
+    Warmly,
+    Yael Laniado, RD
+    NewTritious Life LLC`;
 
     await base44.asServiceRole.integrations.Core.SendEmail({
       to: appt.client_email,
