@@ -116,11 +116,11 @@ export default function ApproachSection() {
             </p>
             <div className="mt-4 flex justify-center">
               <button
-                onClick={() => navigate("/book-session")}
+                onClick={() => navigate("/free-call")}
                 className="px-8 py-3.5 rounded-full font-body font-medium text-sm text-white transition-all duration-300 hover:opacity-90 shadow-lg"
                 style={{ backgroundColor: "#0D3B3E" }}
               >
-                Schedule 15-Min Call
+                Unsure? Book a 15-Min Call
               </button>
             </div>
             <p className="font-body text-sm text-muted-foreground leading-relaxed text-center mt-5 max-w-xs mx-auto">
