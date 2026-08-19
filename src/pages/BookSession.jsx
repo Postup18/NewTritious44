@@ -357,22 +357,21 @@ export default function BookSession() {
 
     const dateFormatted = format(selectedDate, "EEEE, MMMM d, yyyy");
 
-    // Invite the client so they become a registered user (enables future emails to them)
+    // Invite the client so they can access the app later (optional, not required for email)
     base44.users.inviteUser(form.client_email, "user").catch(() => {});
 
-    // NOTE: SendEmail only works for registered app users.
-    // Yael must be invited & registered at Newtritious.life@gmail.com for this to deliver.
-    // The invite for the client above also enables their confirmation email below once registered.
+    // Notify Yael of the new booking (sent server-side via backend function)
     base44.integrations.Core.SendEmail({
       to: "Newtritious.life@gmail.com",
       from_name: "NewTritious Life Booking",
       subject: `New Booking: ${form.client_name} — ${dateFormatted} at ${selectedSlot}`,
       body: `New Booking Alert:\n\n${form.client_name} has scheduled a session for ${dateFormatted} at ${selectedSlot}.\nEmail: ${form.client_email}\nPhone: ${form.client_phone}\nState: ${form.client_state}`,
-    }).catch((err) => console.warn("Admin email failed (user may not be registered):", err));
+    }).catch((err) => console.warn("Admin email failed:", err));
 
-    // NOTE: The confirmation email is sent automatically by the "Send Booking Confirmation"
-    // workflow once the client accepts their invite and registers. It cannot be sent here
-    // because the client is not a registered user yet at booking time.
+    // Send the full confirmation email to the customer immediately (server-side, no registration needed)
+    base44.functions.sendBookingConfirmation({ email: form.client_email }).catch((err) =>
+      console.warn("Confirmation email failed:", err)
+    );
 
     // 1.5s processing state
     await new Promise((r) => setTimeout(r, 1500));
