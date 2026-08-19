@@ -374,7 +374,7 @@ export default function BookSession() {
       to: form.client_email,
       from_name: "NewTritious Life",
       subject: `Your nutrition session is confirmed — ${dateFormatted}`,
-      body: `Hi ${form.client_name},\n\nYour nutrition session is set! We'll see you on ${dateFormatted} at ${selectedSlot}.\n\nIf you have any questions before your session, feel free to reach out.\n\nLooking forward to meeting you!\n\nYael\nNewTritious Life`,
+      body: `Hi ${form.client_name},\n\nYour consultation slot is reserved for ${dateFormatted} at ${selectedSlot}!\n\n1. Payment Instructions: Please complete your payment to finalize your booking:\n  • Venmo: @NewTritious-Life\n  • Zelle: ylaniado@hotmail.com (Please include your full name in the payment memo)\n\n2. Your Intake Form\nTo help me prepare for our time together, please complete your health history intake form here: 🔗 https://nurture-flow-diet.base44.app/intake\n\n3. Need to Change Your Time?\nIf you need to adjust or cancel your reservation, you can send us an email: Newtritious.life@gmail.com (Note: Cancellations or reschedules made less than 24 hours before your session are subject to a $75 fee).\n\nWhat happens next?\nOnce your payment is processed, your session is officially confirmed! You will receive a separate reminder email 24 hours before our meeting that will include your secure Google Meet video link.\n\nIf you have any questions, feel free to reply to this email. I look forward to working with you!\n\nWarmly,\nYael Laniado, RD\nNewTritious Life LLC`,
     }).catch((err) => console.warn("Client email failed (user may not be registered):", err));
 
     // 1.5s processing state
