@@ -228,7 +228,7 @@ export default function ServicesSection() {
             Unsure? Book a 15-Min Call
           </p>
           <button
-            onClick={() => navigate("/book-session")}
+            onClick={() => navigate("/free-call")}
             className="bg-primary text-primary-foreground px-8 py-3.5 rounded-full font-body font-medium text-sm hover:opacity-90 transition-all duration-300 shadow-lg"
           >
             Free 15-Min

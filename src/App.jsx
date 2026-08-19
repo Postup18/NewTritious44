@@ -12,6 +12,7 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import RefundPolicy from './pages/RefundPolicy';
 import IntakeChat from './pages/IntakeChat';
 import YaelBotChat from './pages/YaelBotChat';
+import FreeCall from './pages/FreeCall';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -47,6 +48,7 @@ const AuthenticatedApp = () => {
       <Route path="/refund-policy" element={<RefundPolicy />} />
       <Route path="/intake" element={<IntakeChat />} />
       <Route path="/yael-bot" element={<YaelBotChat />} />
+      <Route path="/free-call" element={<FreeCall />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
