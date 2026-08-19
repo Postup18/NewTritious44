@@ -224,14 +224,11 @@ export default function ServicesSection() {
           transition={{ duration: 0.6 }}
           className="text-center mt-14"
         >
-          <p className="font-heading text-lg text-foreground mb-5">
-            Unsure? Book a 15-Min Call
-          </p>
           <button
             onClick={() => navigate("/free-call")}
             className="bg-primary text-primary-foreground px-8 py-3.5 rounded-full font-body font-medium text-sm hover:opacity-90 transition-all duration-300 shadow-lg"
           >
-            Free 15-Min
+            Unsure? Book a 15-Min Call
           </button>
         </motion.div>
       </div>
