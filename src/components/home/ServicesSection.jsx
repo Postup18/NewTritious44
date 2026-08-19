@@ -209,6 +209,15 @@ export default function ServicesSection() {
             Every journey begins with a comprehensive consultation. From there,
             I craft a plan that fits seamlessly into your life.
           </p>
+
+          <div className="mt-8">
+            <button
+              onClick={() => navigate("/free-call")}
+              className="bg-primary text-primary-foreground px-8 py-3.5 rounded-full font-body font-medium text-sm hover:opacity-90 transition-all duration-300 shadow-lg"
+            >
+              Unsure? Book a 15-Min Call
+            </button>
+          </div>
         </motion.div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -216,21 +225,6 @@ export default function ServicesSection() {
             <ServiceCard key={i} service={service} index={i} />
           ))}
         </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.6 }}
-          className="text-center mt-14"
-        >
-          <button
-            onClick={() => navigate("/free-call")}
-            className="bg-primary text-primary-foreground px-8 py-3.5 rounded-full font-body font-medium text-sm hover:opacity-90 transition-all duration-300 shadow-lg"
-          >
-            Unsure? Book a 15-Min Call
-          </button>
-        </motion.div>
       </div>
     </section>
   );
