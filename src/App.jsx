@@ -13,6 +13,7 @@ import RefundPolicy from './pages/RefundPolicy';
 import IntakeChat from './pages/IntakeChat';
 import YaelBotChat from './pages/YaelBotChat';
 import FreeCall from './pages/FreeCall';
+import BookingConfirmed from './pages/BookingConfirmed';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -49,6 +50,7 @@ const AuthenticatedApp = () => {
       <Route path="/intake" element={<IntakeChat />} />
       <Route path="/yael-bot" element={<YaelBotChat />} />
       <Route path="/free-call" element={<FreeCall />} />
+      <Route path="/booking-confirmed" element={<BookingConfirmed />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
