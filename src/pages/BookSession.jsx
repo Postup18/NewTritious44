@@ -18,6 +18,29 @@ const isUnavailableDay = (date) => {
   return day === 0 || day === 6;
 };
 
+const PACKAGES = [
+  {
+    id: "kickstart",
+    name: "Kickstart Consultation",
+    price: "$175",
+    description: "1 session — Required standalone session for all new clients.",
+  },
+  {
+    id: "habit_builder",
+    name: "90-Day Habit Builder",
+    price: "$525",
+    badge: "Most Popular",
+    description: "4 sessions total (Initial Consult + 3 follow-ups; payment plans available).",
+  },
+  {
+    id: "vip_deep_dive",
+    name: "VIP Deep Dive",
+    price: "$950",
+    badge: "Best Value",
+    description: "7 sessions total (Initial Consult + 6 follow-ups, Fullscript lab orders, and custom support).",
+  },
+];
+
 // ─── Step 1: Selection ───────────────────────────────────────────────────────
 function SelectionStep({ onConfirm }) {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -25,6 +48,7 @@ function SelectionStep({ onConfirm }) {
   const [bookedSlots, setBookedSlots] = useState([]);
   const [loadingSlots, setLoadingSlots] = useState(false);
   const [form, setForm] = useState({ client_name: "", client_email: "", client_phone: "", client_state: "" });
+  const [selectedPackage, setSelectedPackage] = useState("kickstart");
 
   const handleDateSelect = async (date) => {
     if (!date) return;
@@ -43,11 +67,61 @@ function SelectionStep({ onConfirm }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!canSubmit) return;
-    onConfirm({ selectedDate, selectedSlot, form });
+    onConfirm({ selectedDate, selectedSlot, form, selectedPackage });
   };
+
+  const selectedPkg = PACKAGES.find((p) => p.id === selectedPackage);
 
   return (
     <form onSubmit={handleSubmit} className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
+      {/* Package Selection */}
+      <div className="mb-10">
+        <div className="flex items-center gap-2 mb-4">
+          <Leaf className="w-4 h-4" style={{ color: "#87a96b" }} />
+          <h2 className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#87a96b" }}>
+            Choose a Package
+          </h2>
+        </div>
+        <div className="grid sm:grid-cols-3 gap-4">
+          {PACKAGES.map((pkg) => {
+            const active = selectedPackage === pkg.id;
+            return (
+              <button
+                key={pkg.id}
+                type="button"
+                onClick={() => setSelectedPackage(pkg.id)}
+                className={`relative text-left rounded-2xl p-5 border-2 transition-all duration-200 bg-white ${active ? "shadow-md" : "border-gray-200 hover:border-gray-300"}`}
+                style={active ? { borderColor: "#87a96b" } : {}}
+              >
+                {pkg.badge && (
+                  <span
+                    className="absolute -top-2.5 left-5 text-[10px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-full text-white"
+                    style={{ backgroundColor: "#87a96b" }}
+                  >
+                    {pkg.badge}
+                  </span>
+                )}
+                {active && (
+                  <span
+                    className="absolute top-3 right-3 w-5 h-5 rounded-full flex items-center justify-center"
+                    style={{ backgroundColor: "#87a96b" }}
+                  >
+                    <CheckCircle className="w-3.5 h-3.5 text-white" />
+                  </span>
+                )}
+                <h3 className="font-heading text-base font-semibold text-gray-900 mb-1 pr-6">
+                  {pkg.name}
+                </h3>
+                <p className="font-heading text-2xl font-semibold mb-2" style={{ color: "#87a96b" }}>
+                  {pkg.price}
+                </p>
+                <p className="text-xs text-gray-500 leading-relaxed">{pkg.description}</p>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       <div className="grid lg:grid-cols-2 gap-10">
 
         {/* Left: Calendar + Time Slots */}
@@ -212,6 +286,14 @@ function SelectionStep({ onConfirm }) {
               />
             </div>
 
+            {/* Payment info box */}
+            <div
+              className="rounded-xl px-4 py-3.5 text-xs leading-relaxed"
+              style={{ backgroundColor: "#f0f5ec", color: "#5a7a47" }}
+            >
+              💳 <strong>Payment Information:</strong> Payment is completed externally via Zelle or Venmo. Upon booking, you will receive an email confirmation with payment instructions and your virtual meeting link.
+            </div>
+
             <button
               type="submit"
               disabled={!canSubmit}
@@ -221,7 +303,7 @@ function SelectionStep({ onConfirm }) {
                 cursor: canSubmit ? "pointer" : "not-allowed",
               }}
             >
-              Confirm Booking →
+              Request Booking →
             </button>
 
             {!selectedDate && (
@@ -251,8 +333,9 @@ function ProcessingStep() {
 }
 
 // ─── Step 3: Confirmation ─────────────────────────────────────────────────────
-function ConfirmationStep({ selectedDate, selectedSlot, form, onReset }) {
+function ConfirmationStep({ selectedDate, selectedSlot, form, selectedPackage, onReset }) {
   const navigate = useNavigate();
+  const pkg = PACKAGES.find((p) => p.id === selectedPackage) || PACKAGES[0];
   return (
     <div className="flex items-center justify-center min-h-[70vh] px-4">
       <motion.div
@@ -275,12 +358,18 @@ function ConfirmationStep({ selectedDate, selectedSlot, form, onReset }) {
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}>
           <h2 className="font-heading text-2xl font-semibold text-gray-900 mb-2">You're all set!</h2>
           <p className="text-gray-500 text-sm mb-8 leading-relaxed">
-            A confirmation email with payment instructions and your intake form link
-            is on its way to <strong>{form.client_email}</strong>. Check your inbox to finalize your booking.
+            A confirmation email with payment instructions is on its way to{" "}
+            <strong>{form.client_email}</strong>. Check your inbox to finalize your booking.
           </p>
 
           {/* Summary card */}
           <div className="rounded-2xl p-5 text-left space-y-3 mb-8" style={{ backgroundColor: "#f7faf4" }}>
+            <div className="flex items-center gap-3">
+              <Leaf className="w-4 h-4 flex-shrink-0" style={{ color: "#87a96b" }} />
+              <span className="text-sm font-medium text-gray-800">
+                {pkg.name} · {pkg.price}
+              </span>
+            </div>
             <div className="flex items-center gap-3">
               <CalendarIcon className="w-4 h-4 flex-shrink-0" style={{ color: "#87a96b" }} />
               <span className="text-sm font-medium text-gray-800">
@@ -309,9 +398,23 @@ function ConfirmationStep({ selectedDate, selectedSlot, form, onReset }) {
             </div>
           </div>
 
-          <p className="text-xs text-gray-400 mb-6">
+          <p className="text-xs text-gray-400 mb-4">
             A confirmation will be sent to <strong>{form.client_email}</strong>
           </p>
+
+          {/* Intake form CTA */}
+          <div className="rounded-2xl p-4 mb-6" style={{ backgroundColor: "#f0f5ec" }}>
+            <p className="text-xs text-gray-600 mb-3 leading-relaxed">
+              🌿 Next step: complete your health history intake form so I can prepare for our session.
+            </p>
+            <button
+              onClick={() => navigate("/intake")}
+              className="w-full py-3 rounded-full text-sm font-semibold text-white transition-opacity hover:opacity-90"
+              style={{ backgroundColor: "#87a96b" }}
+            >
+              Start Intake Form
+            </button>
+          </div>
 
           <div className="flex flex-col sm:flex-row gap-3">
             <button
@@ -340,8 +443,8 @@ export default function BookSession() {
   const [step, setStep] = useState("selection"); // selection | processing | confirmation
   const [booking, setBooking] = useState(null);
 
-  const handleConfirm = async ({ selectedDate, selectedSlot, form }) => {
-    setBooking({ selectedDate, selectedSlot, form });
+  const handleConfirm = async ({ selectedDate, selectedSlot, form, selectedPackage }) => {
+    setBooking({ selectedDate, selectedSlot, form, selectedPackage });
     setStep("processing");
 
     // Save appointment
@@ -430,16 +533,6 @@ NewTritious Life LLC`;
       {/* Page title — only shown on selection step */}
       {step === "selection" && (
         <div className="text-center py-12 px-6">
-          <div className="flex items-center justify-center gap-2 mb-3">
-            <span className="text-sm text-gray-500">After booking please check my Intake Form</span>
-            <button
-              onClick={() => navigate("/intake")}
-              className="inline-flex items-center gap-1 text-xs font-semibold px-4 py-2 rounded-full border transition-all"
-              style={{ color: "#87a96b", borderColor: "#87a96b" }}
-            >
-              🌿 Start Intake Form
-            </button>
-          </div>
           <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "#87a96b" }}>
             Schedule Online
           </p>
@@ -470,6 +563,7 @@ NewTritious Life LLC`;
               selectedDate={booking.selectedDate}
               selectedSlot={booking.selectedSlot}
               form={booking.form}
+              selectedPackage={booking.selectedPackage}
               onReset={handleReset}
             />
           </motion.div>
