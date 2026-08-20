@@ -431,7 +431,7 @@ NewTritious Life LLC`;
       {step === "selection" && (
         <div className="text-center py-12 px-6">
           <div className="flex items-center justify-center gap-2 mb-3">
-            <span className="text-sm text-gray-500">Before booking please check my Intake Form</span>
+            <span className="text-sm text-gray-500">After booking please check my Intake Form</span>
             <button
               onClick={() => navigate("/intake")}
               className="inline-flex items-center gap-1 text-xs font-semibold px-4 py-2 rounded-full border transition-all"
