@@ -8,109 +8,97 @@ const services = [
     icon: Utensils,
     title: "Custom Nutrition & Meal Planning",
     preview:
-      "Tailored, practical food strategies designed around your real life, preferences, and routine—no rigid templates or restrictive food rules.",
+      "Tailored food strategies designed around your real life, preferences, and routine—no rigid templates or restrictive rules.",
     expanded: {
       whoItsFor:
-        "Busy adults tired of meal prep burnout, food boredom, or confusing nutrition advice who want a clear, enjoyable way to eat.",
+        "Busy adults tired of meal prep burnout and confusing nutrition advice.",
       whatsIncluded: [
-        "Customized meal ideas and flexible weekly frameworks.",
-        "Practical grocery lists and dining-out strategies.",
-        "Easy recipe inspiration tailored to your taste preferences and cooking skill level.",
+        "Flexible weekly frameworks, practical grocery lists, and easy recipes matched to your cooking skill level.",
       ],
       theGoal:
-        "Simplify daily eating and build an effortless, sustainable routine that fits your lifestyle.",
+        "Build an effortless, sustainable eating routine that fits your lifestyle.",
     },
   },
   {
     icon: HeartPulse,
     title: "Nutrition for Health Conditions",
     preview:
-      "Personalized nutrition care if you've been diagnosed with diabetes, insulin resistance, high cholesterol, high blood pressure, or IBS—helping you lower clinical risks without feeling restricted.",
+      "Evidence-based medical nutrition therapy to help manage diabetes, insulin resistance, or IBS and improve lab markers without extreme restrictions.",
     expanded: {
       whoItsFor:
-        "Individuals managing single or multiple chronic health conditions who want to improve lab markers using evidence-based nutrition as medicine.",
+        "Individuals managing chronic health conditions who want to use food as medicine.",
       whatsIncluded: [
-        "Comprehensive review of your medical history and clinical lab work.",
-        "Disease-specific dietary protocols tailored to your daily routine.",
-        "Targeted guidance to improve blood sugar control, lipid panels, or digestive comfort.",
-        "Collaboration with your primary physician or specialists as needed.",
+        "Review of medical history, disease-specific dietary protocols, and physician collaboration as needed.",
       ],
       theGoal:
-        "Manage your health condition effectively, lower clinical risks, and feel confident in your food choices without extreme restrictions.",
+        "Lower clinical risks and feel confident in your food choices.",
     },
   },
   {
     icon: Scale,
     title: "Sustainable Weight & Metabolism",
     preview:
-      "Ditch rigid food rules for a science-backed, non-diet approach to weight management and metabolic health—focused on nourishing your body and building habits that last.",
+      "A science-backed, non-diet approach to optimize your metabolism, balance hunger hormones, and ditch yo-yo dieting for good.",
     expanded: {
       whoItsFor:
-        "Anyone caught in the cycle of yo-yo dieting who wants to optimize their metabolism, balance hunger hormones, and reach a comfortable, sustainable weight.",
+        "Anyone caught in yo-yo dieting looking for long-term weight stability.",
       whatsIncluded: [
-        "Assessment of key metabolic factors (blood sugar balance, satiety signals, daily energy).",
-        "Guidance on nutrient-dense, satisfying meals without strict calorie counting or restriction.",
-        "Behavioral strategies to end guilt-driven eating and build food freedom.",
+        "Metabolic factor assessments, satisfying meal guidance without strict calorie counting, and behavioral strategies.",
       ],
       theGoal:
-        "Achieve long-term weight stability and daily energy while fostering a compassionate, peaceful relationship with food and your body.",
+        "Achieve sustainable weight management while fostering a peaceful relationship with food.",
     },
   },
   {
     icon: Leaf,
     title: "Gut Health & Prevention",
     preview:
-      "Proactive care to heal digestion, balance your microbiome, optimize immune function, and elevate your daily energy levels.",
+      "Proactive care to heal digestion, eliminate bloating, balance your microbiome, and elevate your daily energy levels.",
     expanded: {
       whoItsFor:
-        "Adults dealing with frequent bloating, sluggish digestion, irregular bowel habits, or those seeking long-term preventive longevity.",
+        "Adults dealing with digestive distress, bloating, or seeking longevity care.",
       whatsIncluded: [
-        "Targeted digestion support and gut-microbiome balancing strategies.",
-        "Strategic food elimination and reintroduction protocols (if necessary).",
-        "Integrative guidance on sleep, stress management, and daily movement for optimal gut health.",
+        "Targeted digestion support, microbiome balancing, and optional food elimination/reintroduction protocols.",
       ],
       theGoal:
-        "Eliminate digestive distress, boost total-body vitality, and protect your health for the long run.",
+        "Eliminate discomfort, boost vitality, and protect your long-term health.",
     },
   },
   {
     icon: FlaskConical,
     title: "Functional Lab Testing",
     preview:
-      "Deep-dive diagnostic testing to uncover hidden nutrient deficiencies, hormonal shifts, and root causes standard labs might miss.",
+      "Deep-dive diagnostic testing ordered directly through Fullscript and expertly interpreted to uncover hidden root causes.",
     expanded: {
       whoItsFor:
-        'Anyone who feels "off" or experiences lingering symptoms despite being told their standard annual lab results are completely normal.',
+        "Anyone experiencing lingering symptoms despite normal annual blood work.",
       whatsIncluded: [
-        "Ordering and in-depth interpretation of comprehensive functional blood panels.",
-        "Clear, patient-friendly translation of complex biomarkers.",
-        "A personalized action plan built directly from your unique biological data.",
+        "Ordering comprehensive functional panels through Fullscript and receiving in-depth, plain-English interpretation.",
       ],
       theGoal:
-        "Stop guessing and start addressing the true root cause of your health concerns with objective data.",
+        "Stop guessing and address the true root cause using objective biological data.",
     },
   },
   {
     icon: Pill,
     title: "Targeted Supplementation",
     preview:
-      "Cut through supplement clutter with personalized, high-quality recommendations designed specifically for your body's actual needs.",
+      "Cut through supplement clutter with a personalized safety audit and professional-grade recommendations ordered via Fullscript.",
     expanded: {
       whoItsFor:
-        "Individuals overwhelmed by supplement trends, social media advice, or cabinets full of vitamins who want safe, effective guidance.",
+        "Individuals overwhelmed by supplement trends and social media advice.",
       whatsIncluded: [
-        "Full supplement safety audit (checking for quality, nutrient interactions, and proper dosages).",
-        "Customized, minimal protocol focusing only on what your body clinically requires.",
-        "Access to professional-grade, third-party tested supplements with exclusive dispenser discounts.",
+        "A full safety check for interactions, a minimal custom protocol, and ordering professional-grade brands directly through Fullscript.",
       ],
       theGoal:
-        "Eliminate supplement clutter, save money, and ensure you are taking safe, therapeutic-grade products that actually deliver results.",
+        "Save money, eliminate clutter, and take only what your body actually requires.",
     },
   },
 ];
 
 function ServiceCard({ service, index }) {
   const [expanded, setExpanded] = useState(false);
+  const navigate = useNavigate();
   const ServiceIcon = service.icon;
 
   return (
@@ -173,6 +161,13 @@ function ServiceCard({ service, index }) {
                 {service.expanded.theGoal}
               </p>
             </div>
+
+            <button
+              onClick={() => navigate("/book-session")}
+              className="mt-2 w-full py-3 rounded-full bg-primary text-primary-foreground font-body font-medium text-sm hover:opacity-90 transition-all duration-300"
+            >
+              View Pricing & Book
+            </button>
           </motion.div>
         )}
       </AnimatePresence>
