@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Utensils, HeartPulse, Scale, Leaf, FlaskConical, Pill } from "lucide-react";
 
 const services = [
@@ -162,12 +162,12 @@ function ServiceCard({ service, index }) {
               </p>
             </div>
 
-            <button
-              onClick={() => navigate("/book-session")}
-              className="mt-2 w-full py-3 rounded-full bg-primary text-primary-foreground font-body font-medium text-sm hover:opacity-90 transition-all duration-300"
+            <Link
+              to="/book-session"
+              className="mt-2 w-full py-3 rounded-full bg-primary text-primary-foreground font-body font-medium text-sm hover:opacity-90 transition-all duration-300 text-center block"
             >
               View Pricing & Book
-            </button>
+            </Link>
           </motion.div>
         )}
       </AnimatePresence>
