@@ -32,9 +32,9 @@ export default function AboutSection() {
             transition={{ duration: 0.8 }}
             className="relative"
           >
-            <div className="relative rounded-2xl overflow-hidden aspect-[3/4] shadow-2xl">
+            <div className="relative rounded-2xl overflow-hidden aspect-[3/4] shadow-2xl mx-auto" style={{ maxWidth: "50%" }}>
               <img
-                src="https://media.base44.com/images/public/69f267852d1729cd58c3d853/e8b45a4a4_YaelsPhoto.jpg"
+                src="https://media.base44.com/images/public/69f267852d1729cd58c3d853/5533ebcb5_YaelPhoto081926.jpg"
                 alt="Yael — Registered Dietitian"
                 className="w-full h-full object-cover"
               />
