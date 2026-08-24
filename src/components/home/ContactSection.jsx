@@ -1,16 +1,15 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Phone, Mail, MapPin, Clock, ShieldCheck } from "lucide-react";
+import { useLanguage } from "@/lib/i18n";
 
-const contactInfo = [
-  { icon: Phone, label: "Phone", value: "786-519-1550" },
-  { icon: Mail, label: "Email", value: "Newtritious.life@gmail.com" },
-  { icon: MapPin, label: "Location", value: "100% Virtual Sessions (Primary clinical licenses in FL, TX, KY, IL & GA). Not in one of these states? Send a message to see if we can support your location!" },
-  { icon: ShieldCheck, label: "Insurance", value: "In-network with most major insurances (Superbills provided for out-of-network)" },
-  { icon: Clock, label: "Hours", value: "Mon–Fri: 9am – 6pm" },
-];
+const infoIcons = [Phone, Mail, MapPin, ShieldCheck, Clock];
 
 export default function ContactSection() {
+  const { t } = useLanguage();
+  const ct = t.contact;
+  const f = ct.form;
+
   return (
     <section id="contact" className="py-24 md:py-32 bg-background">
       <div className="max-w-6xl mx-auto px-6">
@@ -23,30 +22,33 @@ export default function ContactSection() {
             transition={{ duration: 0.7 }}
           >
             <p className="font-body text-sm tracking-[0.2em] uppercase text-primary mb-4">
-              Get in Touch
+              {ct.eyebrow}
             </p>
             <h2 className="font-heading text-3xl md:text-4xl font-semibold text-foreground leading-snug">
-              Ready to Start <br />
-              <span className="italic font-normal">Your Journey?</span>
+              {ct.title1} <br />
+              <span className="italic font-normal">{ct.title2}</span>
             </h2>
             <p className="font-body text-muted-foreground mt-6 leading-relaxed">
-              Have a question or want to learn more? Send me a message and I'll get back to you within 24 hours.
+              {ct.body}
             </p>
 
             <div className="mt-10 space-y-5">
-              {contactInfo.map((item, i) => (
-                <div key={i} className="flex items-center gap-4">
-                  <div className="w-11 h-11 rounded-full bg-accent flex items-center justify-center flex-shrink-0">
-                    <item.icon className="w-5 h-5 text-primary" />
+              {ct.info.map((item, i) => {
+                const Icon = infoIcons[i];
+                return (
+                  <div key={i} className="flex items-center gap-4">
+                    <div className="w-11 h-11 rounded-full bg-accent flex items-center justify-center flex-shrink-0">
+                      <Icon className="w-5 h-5 text-primary" />
+                    </div>
+                    <div>
+                      <p className="font-body text-xs text-muted-foreground uppercase tracking-wider">
+                        {item.label}
+                      </p>
+                      <p className="font-body text-sm font-medium text-foreground">{item.value}</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-body text-xs text-muted-foreground uppercase tracking-wider">
-                      {item.label}
-                    </p>
-                    <p className="font-body text-sm font-medium text-foreground">{item.value}</p>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </motion.div>
 
@@ -63,41 +65,41 @@ export default function ContactSection() {
             >
               <div>
                 <label className="font-body text-xs text-muted-foreground uppercase tracking-wider block mb-2">
-                  Full Name
+                  {f.name}
                 </label>
                 <input
                   type="text"
-                  placeholder="Your name"
+                  placeholder={f.namePh}
                   className="w-full bg-background border border-border rounded-lg px-4 py-3 font-body text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
                 />
               </div>
               <div>
                 <label className="font-body text-xs text-muted-foreground uppercase tracking-wider block mb-2">
-                  Email
+                  {f.email}
                 </label>
                 <input
                   type="email"
-                  placeholder="your@email.com"
+                  placeholder={f.emailPh}
                   className="w-full bg-background border border-border rounded-lg px-4 py-3 font-body text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
                 />
               </div>
               <div>
                 <label className="font-body text-xs text-muted-foreground uppercase tracking-wider block mb-2">
-                  Phone (optional)
+                  {f.phone}
                 </label>
                 <input
                   type="tel"
-                  placeholder="+1 (555) 000-0000"
+                  placeholder={f.phonePh}
                   className="w-full bg-background border border-border rounded-lg px-4 py-3 font-body text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
                 />
               </div>
               <div>
                 <label className="font-body text-xs text-muted-foreground uppercase tracking-wider block mb-2">
-                  Message
+                  {f.message}
                 </label>
                 <textarea
                   rows={4}
-                  placeholder="Tell me about your goals..."
+                  placeholder={f.messagePh}
                   className="w-full bg-background border border-border rounded-lg px-4 py-3 font-body text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all resize-none"
                 />
               </div>
@@ -105,7 +107,7 @@ export default function ContactSection() {
                 type="submit"
                 className="w-full bg-primary text-primary-foreground py-3.5 rounded-full font-body font-medium text-sm hover:opacity-90 transition-opacity"
               >
-                Send Message
+                {f.submit}
               </button>
             </form>
           </motion.div>

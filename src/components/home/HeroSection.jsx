@@ -2,9 +2,11 @@ import React from "react";
 import { motion } from "framer-motion";
 import { ArrowDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useLanguage } from "@/lib/i18n";
 
 export default function HeroSection() {
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const scrollTo = (href) => {
     const el = document.querySelector(href);
@@ -31,7 +33,7 @@ export default function HeroSection() {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="font-body text-sm tracking-[0.3em] uppercase text-white/80 mb-6"
         >
-          Registered Dietitian · Personalized Nutrition
+          {t.hero.tagline}
         </motion.p>
 
         <motion.h1
@@ -40,7 +42,7 @@ export default function HeroSection() {
           transition={{ duration: 0.8, delay: 0.4 }}
           className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold text-white leading-tight"
         >
-          NewTritious Life
+          {t.hero.title}
         </motion.h1>
 
         <motion.h2
@@ -49,9 +51,9 @@ export default function HeroSection() {
           transition={{ duration: 0.8, delay: 0.5 }}
           className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold text-white leading-tight mt-2"
         >
-          Nourish Your Body,
+          {t.hero.subtitle1}
           <br />
-          <span className="italic font-normal">Transform Your Life</span>
+          <span className="italic font-normal">{t.hero.subtitle2}</span>
         </motion.h2>
 
         <motion.p
@@ -60,8 +62,7 @@ export default function HeroSection() {
           transition={{ duration: 0.8, delay: 0.6 }}
           className="font-body text-base sm:text-lg text-white/85 mt-6 max-w-xl mx-auto leading-relaxed"
         >
-          Stop guessing what works for your body. Get expert 1-on-1 guidance to
-          build realistic habits, clear the confusion, and achieve lasting results.
+          {t.hero.body}
         </motion.p>
 
         <motion.p
@@ -70,7 +71,7 @@ export default function HeroSection() {
           transition={{ duration: 0.8, delay: 0.7 }}
           className="font-body text-sm sm:text-base text-white/85 mt-4 max-w-xl mx-auto leading-relaxed"
         >
-          🌿 100% Virtual Sessions • Licensed & Telehealth Certified • Most Insurances Accepted
+          {t.hero.note}
         </motion.p>
 
         <motion.div
@@ -83,13 +84,13 @@ export default function HeroSection() {
             onClick={() => navigate("/free-call")}
             className="bg-primary text-primary-foreground px-8 py-3.5 rounded-full font-body font-medium text-sm hover:opacity-90 transition-all duration-300 shadow-lg"
           >
-            Unsure? Book a 15-Min Call
+            {t.hero.btnCall}
           </button>
           <button
             onClick={() => scrollTo("#services")}
             className="border border-white/40 text-white px-8 py-3.5 rounded-full font-body font-medium text-sm hover:bg-white/10 transition-all duration-300"
           >
-            View Services
+            {t.hero.btnServices}
           </button>
         </motion.div>
       </div>

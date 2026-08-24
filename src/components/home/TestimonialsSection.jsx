@@ -1,29 +1,12 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Star, Quote } from "lucide-react";
-
-const testimonials = [
-  {
-    name: "Rachel M.",
-    role: "Weight Management Client",
-    text: "Yael completely changed how I think about food. For the first time, I feel in control — not restricted. I've lost 15 kg and actually enjoy eating more than ever.",
-    stars: 5,
-  },
-  {
-    name: "David K.",
-    role: "Diabetes Management",
-    text: "My blood sugar levels have never been this stable. Yael's approach is so practical and easy to follow. I wish I had found her years ago.",
-    stars: 5,
-  },
-  {
-    name: "Lina T.",
-    role: "Wellness Client",
-    text: "I came in feeling exhausted all the time. Within weeks of following Yael's plan, my energy skyrocketed. She truly listens and cares about your progress.",
-    stars: 5,
-  },
-];
+import { useLanguage } from "@/lib/i18n";
 
 export default function TestimonialsSection() {
+  const { t } = useLanguage();
+  const ts = t.testimonials;
+
   return (
     <section id="testimonials" className="py-24 md:py-32 bg-secondary/50">
       <div className="max-w-6xl mx-auto px-6">
@@ -35,15 +18,15 @@ export default function TestimonialsSection() {
           className="text-center max-w-2xl mx-auto mb-16"
         >
           <p className="font-body text-sm tracking-[0.2em] uppercase text-primary mb-4">
-            Testimonials
+            {ts.eyebrow}
           </p>
           <h2 className="font-heading text-3xl md:text-4xl font-semibold text-foreground">
-            What My Clients <span className="italic font-normal">Say</span>
+            {ts.title1} <span className="italic font-normal">{ts.title2}</span>
           </h2>
         </motion.div>
 
         <div className="grid md:grid-cols-3 gap-6">
-          {testimonials.map((t, i) => (
+          {ts.items.map((tm, i) => (
             <motion.div
               key={i}
               initial={{ opacity: 0, y: 30 }}
@@ -54,16 +37,16 @@ export default function TestimonialsSection() {
             >
               <Quote className="w-8 h-8 text-primary/20 mb-4" />
               <p className="font-body text-sm text-muted-foreground leading-relaxed flex-1">
-                "{t.text}"
+                "{tm.text}"
               </p>
               <div className="mt-6 pt-5 border-t border-border">
                 <div className="flex items-center gap-1 mb-2">
-                  {Array.from({ length: t.stars }).map((_, j) => (
+                  {Array.from({ length: tm.stars }).map((_, j) => (
                     <Star key={j} className="w-4 h-4 fill-primary text-primary" />
                   ))}
                 </div>
-                <p className="font-heading text-sm font-semibold text-foreground">{t.name}</p>
-                <p className="font-body text-xs text-muted-foreground">{t.role}</p>
+                <p className="font-heading text-sm font-semibold text-foreground">{tm.name}</p>
+                <p className="font-body text-xs text-muted-foreground">{tm.role}</p>
               </div>
             </motion.div>
           ))}
