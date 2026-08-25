@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Calendar as CalendarIcon, Clock, CheckCircle, Leaf, ArrowLeft, User, Mail, Phone, MapPin } from "lucide-react";
-import { format, isBefore, startOfDay, isSameDay } from "date-fns";
+import { format, isBefore, startOfDay } from "date-fns";
 import { base44 } from "@/api/base44Client";
 import { Calendar } from "@/components/ui/calendar";
 import { useNavigate } from "react-router-dom";
+import { useLanguage } from "@/lib/i18n";
 
 const TIME_SLOTS = [
   "9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM",
@@ -18,31 +19,8 @@ const isUnavailableDay = (date) => {
   return day === 0 || day === 6;
 };
 
-const PACKAGES = [
-  {
-    id: "kickstart",
-    name: "Kickstart Consultation",
-    price: "$175",
-    description: "1 session — Required standalone session for all new clients.",
-  },
-  {
-    id: "habit_builder",
-    name: "90-Day Habit Builder",
-    price: "$525",
-    badge: "Most Popular",
-    description: "4 sessions total (Initial Consult + 3 follow-ups; payment plans available).",
-  },
-  {
-    id: "vip_deep_dive",
-    name: "VIP Deep Dive",
-    price: "$950",
-    badge: "Best Value",
-    description: "7 sessions total (Initial Consult + 6 follow-ups, Fullscript lab orders, and custom support).",
-  },
-];
-
 // ─── Step 1: Selection ───────────────────────────────────────────────────────
-function SelectionStep({ onConfirm }) {
+function SelectionStep({ onConfirm, t }) {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [bookedSlots, setBookedSlots] = useState([]);
@@ -70,8 +48,6 @@ function SelectionStep({ onConfirm }) {
     onConfirm({ selectedDate, selectedSlot, form, selectedPackage });
   };
 
-  const selectedPkg = PACKAGES.find((p) => p.id === selectedPackage);
-
   return (
     <form onSubmit={handleSubmit} className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
       {/* Package Selection */}
@@ -79,11 +55,11 @@ function SelectionStep({ onConfirm }) {
         <div className="flex items-center gap-2 mb-4">
           <Leaf className="w-4 h-4" style={{ color: "#87a96b" }} />
           <h2 className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#87a96b" }}>
-            Choose a Package
+            {t.bookSession.choosePackage}
           </h2>
         </div>
         <div className="grid sm:grid-cols-3 gap-4">
-          {PACKAGES.map((pkg) => {
+          {t.bookSession.packages.map((pkg) => {
             const active = selectedPackage === pkg.id;
             return (
               <button
@@ -131,7 +107,7 @@ function SelectionStep({ onConfirm }) {
             <div className="flex items-center gap-2 mb-4">
               <CalendarIcon className="w-4 h-4" style={{ color: "#87a96b" }} />
               <h2 className="font-heading text-base font-semibold text-foreground tracking-wide uppercase text-xs" style={{ color: "#87a96b", letterSpacing: "0.12em" }}>
-                Select a Date
+                {t.bookSession.selectDate}
               </h2>
             </div>
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex justify-center">
@@ -158,7 +134,7 @@ function SelectionStep({ onConfirm }) {
                 <div className="flex items-center gap-2 mb-4">
                   <Clock className="w-4 h-4" style={{ color: "#87a96b" }} />
                   <h2 className="font-heading text-xs font-semibold uppercase tracking-wider" style={{ color: "#87a96b" }}>
-                    Available Times · {format(selectedDate, "EEEE, MMMM d")}
+                    {t.bookSession.availableTimes} · {format(selectedDate, "EEEE, MMMM d")}
                   </h2>
                 </div>
                 {loadingSlots ? (
@@ -201,7 +177,7 @@ function SelectionStep({ onConfirm }) {
           <div className="flex items-center gap-2 mb-4">
             <User className="w-4 h-4" style={{ color: "#87a96b" }} />
             <h2 className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#87a96b" }}>
-              Your Details
+              {t.bookSession.yourDetails}
             </h2>
           </div>
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-5">
@@ -223,16 +199,15 @@ function SelectionStep({ onConfirm }) {
 
             <div>
               <label className="block text-xs text-gray-500 uppercase tracking-wider mb-1.5 font-medium">
-                Full Name <span style={{ color: "#87a96b" }}>*</span>
+                {t.bookSession.fullName} <span style={{ color: "#87a96b" }}>*</span>
               </label>
               <input
                 type="text"
                 required
                 value={form.client_name}
                 onChange={(e) => setForm({ ...form, client_name: e.target.value })}
-                placeholder="Your full name"
+                placeholder={t.bookSession.fullNamePh}
                 className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none transition-all bg-gray-50 focus:bg-white"
-                style={{ focusBorderColor: "#87a96b" }}
                 onFocus={(e) => (e.target.style.borderColor = "#87a96b")}
                 onBlur={(e) => (e.target.style.borderColor = "#e5e7eb")}
               />
@@ -240,14 +215,14 @@ function SelectionStep({ onConfirm }) {
 
             <div>
               <label className="block text-xs text-gray-500 uppercase tracking-wider mb-1.5 font-medium">
-                Email Address <span style={{ color: "#87a96b" }}>*</span>
+                {t.bookSession.email} <span style={{ color: "#87a96b" }}>*</span>
               </label>
               <input
                 type="email"
                 required
                 value={form.client_email}
                 onChange={(e) => setForm({ ...form, client_email: e.target.value })}
-                placeholder="your@email.com"
+                placeholder={t.bookSession.emailPh}
                 className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none transition-all bg-gray-50 focus:bg-white"
                 onFocus={(e) => (e.target.style.borderColor = "#87a96b")}
                 onBlur={(e) => (e.target.style.borderColor = "#e5e7eb")}
@@ -256,14 +231,14 @@ function SelectionStep({ onConfirm }) {
 
             <div>
               <label className="block text-xs text-gray-500 uppercase tracking-wider mb-1.5 font-medium">
-                Telephone <span style={{ color: "#87a96b" }}>*</span>
+                {t.bookSession.telephone} <span style={{ color: "#87a96b" }}>*</span>
               </label>
               <input
                 type="tel"
                 required
                 value={form.client_phone}
                 onChange={(e) => setForm({ ...form, client_phone: e.target.value })}
-                placeholder="+1 (555) 000-0000"
+                placeholder={t.bookSession.telephonePh}
                 className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none transition-all bg-gray-50 focus:bg-white"
                 onFocus={(e) => (e.target.style.borderColor = "#87a96b")}
                 onBlur={(e) => (e.target.style.borderColor = "#e5e7eb")}
@@ -272,14 +247,14 @@ function SelectionStep({ onConfirm }) {
 
             <div>
               <label className="block text-xs text-gray-500 uppercase tracking-wider mb-1.5 font-medium">
-                State <span style={{ color: "#87a96b" }}>*</span>
+                {t.bookSession.state} <span style={{ color: "#87a96b" }}>*</span>
               </label>
               <input
                 type="text"
                 required
                 value={form.client_state}
                 onChange={(e) => setForm({ ...form, client_state: e.target.value })}
-                placeholder="e.g. FL"
+                placeholder={t.bookSession.statePh}
                 className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none transition-all bg-gray-50 focus:bg-white"
                 onFocus={(e) => (e.target.style.borderColor = "#87a96b")}
                 onBlur={(e) => (e.target.style.borderColor = "#e5e7eb")}
@@ -291,7 +266,7 @@ function SelectionStep({ onConfirm }) {
               className="rounded-xl px-4 py-3.5 text-xs leading-relaxed"
               style={{ backgroundColor: "#f0f5ec", color: "#5a7a47" }}
             >
-              💳 <strong>Payment Information:</strong> Payment is completed externally via Zelle or Venmo. Upon booking, you will receive an email confirmation with payment instructions and your virtual meeting link.
+              💳 <strong>{t.bookSession.paymentInfo.split(":")[0]}:</strong> {t.bookSession.paymentInfo.split(":").slice(1).join(":").trim()}
             </div>
 
             <button
@@ -303,11 +278,11 @@ function SelectionStep({ onConfirm }) {
                 cursor: canSubmit ? "pointer" : "not-allowed",
               }}
             >
-              Request Booking →
+              {t.bookSession.requestBooking}
             </button>
 
             {!selectedDate && (
-              <p className="text-center text-xs text-gray-400">Please select a date and time first</p>
+              <p className="text-center text-xs text-gray-400">{t.bookSession.selectFirst}</p>
             )}
           </div>
         </div>
@@ -318,7 +293,7 @@ function SelectionStep({ onConfirm }) {
 }
 
 // ─── Step 2: Processing ───────────────────────────────────────────────────────
-function ProcessingStep() {
+function ProcessingStep({ t }) {
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6">
       <motion.div
@@ -327,15 +302,15 @@ function ProcessingStep() {
         className="w-12 h-12 rounded-full border-4 border-t-transparent"
         style={{ borderColor: "#87a96b", borderTopColor: "transparent" }}
       />
-      <p className="text-gray-500 text-sm font-medium">Confirming your session…</p>
+      <p className="text-gray-500 text-sm font-medium">{t.bookSession.processing}</p>
     </div>
   );
 }
 
 // ─── Step 3: Confirmation ─────────────────────────────────────────────────────
-function ConfirmationStep({ selectedDate, selectedSlot, form, selectedPackage, onReset }) {
+function ConfirmationStep({ selectedDate, selectedSlot, form, selectedPackage, onReset, t }) {
   const navigate = useNavigate();
-  const pkg = PACKAGES.find((p) => p.id === selectedPackage) || PACKAGES[0];
+  const pkg = t.bookSession.packages.find((p) => p.id === selectedPackage) || t.bookSession.packages[0];
   return (
     <div className="flex items-center justify-center min-h-[70vh] px-4">
       <motion.div
@@ -356,10 +331,10 @@ function ConfirmationStep({ selectedDate, selectedSlot, form, selectedPackage, o
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}>
-          <h2 className="font-heading text-2xl font-semibold text-gray-900 mb-2">You're all set!</h2>
+          <h2 className="font-heading text-2xl font-semibold text-gray-900 mb-2">{t.bookSession.allSet}</h2>
           <p className="text-gray-500 text-sm mb-8 leading-relaxed">
-            A confirmation email with payment instructions is on its way to{" "}
-            <strong>{form.client_email}</strong>. Check your inbox to finalize your booking.
+            {t.bookSession.confirmationEmail}{" "}
+            <strong>{form.client_email}</strong>. {t.bookSession.checkInbox}
           </p>
 
           {/* Summary card */}
@@ -399,20 +374,20 @@ function ConfirmationStep({ selectedDate, selectedSlot, form, selectedPackage, o
           </div>
 
           <p className="text-xs text-gray-400 mb-4">
-            A confirmation will be sent to <strong>{form.client_email}</strong>
+            {t.bookSession.confirmationEmail} <strong>{form.client_email}</strong>
           </p>
 
           {/* Intake form CTA */}
           <div className="rounded-2xl p-4 mb-6" style={{ backgroundColor: "#f0f5ec" }}>
             <p className="text-xs text-gray-600 mb-3 leading-relaxed">
-              🌿 Next step: complete your health history intake form so I can prepare for our session.
+              {t.bookSession.intakeCta}
             </p>
             <button
               onClick={() => navigate("/intake")}
               className="w-full py-3 rounded-full text-sm font-semibold text-white transition-opacity hover:opacity-90"
               style={{ backgroundColor: "#87a96b" }}
             >
-              Start Intake Form
+              {t.bookSession.startIntake}
             </button>
           </div>
 
@@ -421,14 +396,14 @@ function ConfirmationStep({ selectedDate, selectedSlot, form, selectedPackage, o
               onClick={() => navigate("/")}
               className="flex-1 py-3 rounded-full border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
             >
-              Return Home
+              {t.bookSession.returnHome}
             </button>
             <button
               onClick={onReset}
               className="flex-1 py-3 rounded-full text-sm font-semibold text-white transition-opacity hover:opacity-90"
               style={{ backgroundColor: "#87a96b" }}
             >
-              Book Another
+              {t.bookSession.bookAnother}
             </button>
           </div>
         </motion.div>
@@ -440,6 +415,7 @@ function ConfirmationStep({ selectedDate, selectedSlot, form, selectedPackage, o
 // ─── Main Page ────────────────────────────────────────────────────────────────
 export default function BookSession() {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [step, setStep] = useState("selection"); // selection | processing | confirmation
   const [booking, setBooking] = useState(null);
 
@@ -521,11 +497,11 @@ NewTritious Life LLC`;
           className="flex items-center gap-2 text-gray-500 hover:text-gray-800 transition-colors text-sm"
         >
           <ArrowLeft className="w-4 h-4" />
-          Back
+          {t.bookSession.back}
         </button>
         <button onClick={() => navigate("/")} className="flex items-center gap-2">
           <Leaf className="w-5 h-5" style={{ color: "#87a96b" }} />
-          <span className="font-heading text-lg font-semibold text-gray-900">NewTritious Life</span>
+          <span className="font-heading text-lg font-semibold text-gray-900">{t.bookSession.brand}</span>
         </button>
         <div className="w-16" /> {/* spacer */}
       </div>
@@ -534,13 +510,13 @@ NewTritious Life LLC`;
       {step === "selection" && (
         <div className="text-center py-12 px-6">
           <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "#87a96b" }}>
-            Schedule Online
+            {t.bookSession.scheduleOnline}
           </p>
           <h1 className="font-heading text-4xl md:text-5xl font-semibold text-gray-900">
-            Book a Session
+            {t.bookSession.title}
           </h1>
           <p className="text-gray-500 mt-3 text-sm max-w-sm mx-auto">
-            Choose a date and time that works for you. All sessions are 50 minutes.
+            {t.bookSession.subtitle}
           </p>
         </div>
       )}
@@ -549,12 +525,12 @@ NewTritious Life LLC`;
       <AnimatePresence mode="wait">
         {step === "selection" && (
           <motion.div key="selection" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            <SelectionStep onConfirm={handleConfirm} />
+            <SelectionStep onConfirm={handleConfirm} t={t} />
           </motion.div>
         )}
         {step === "processing" && (
           <motion.div key="processing" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            <ProcessingStep />
+            <ProcessingStep t={t} />
           </motion.div>
         )}
         {step === "confirmation" && booking && (
@@ -565,6 +541,7 @@ NewTritious Life LLC`;
               form={booking.form}
               selectedPackage={booking.selectedPackage}
               onReset={handleReset}
+              t={t}
             />
           </motion.div>
         )}
