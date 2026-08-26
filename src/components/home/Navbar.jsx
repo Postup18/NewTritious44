@@ -66,7 +66,7 @@ export default function Navbar() {
         {/* Mobile toggle */}
         <div className="md:hidden flex items-center gap-3">
           <LanguageSwitcher />
-          <button className="text-foreground" onClick={() => setOpen(!open)}>
+          <button className={scrolled ? "text-foreground" : "text-white"} onClick={() => setOpen(!open)}>
             {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
