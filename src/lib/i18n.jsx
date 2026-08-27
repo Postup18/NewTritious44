@@ -21,7 +21,7 @@ const translations = {
       subtitle2: "Transform Your Life",
       body: "Stop guessing what works for your body. Get expert 1-on-1 guidance to build realistic habits, clear the confusion, and achieve lasting results.",
       note: "🌿 100% Virtual Sessions • Licensed & Telehealth Certified • Most Insurances Accepted",
-      btnCall: "Unsure? Book a 15-Min Call",
+      btnCall: "Book a Session",
       btnServices: "View Services",
     },
     about: {
@@ -257,7 +257,7 @@ const translations = {
       subtitle2: "Transforma tu vida",
       body: "Deja de adivinar qué funciona para tu cuerpo. Obtén guía experta 1 a 1 para crear hábitos realistas, aclarar la confusión y lograr resultados duraderos.",
       note: "🌿 100% Sesiones Virtuales • Con Licencia y Certificada en Telehealth • Aceptamos la Mayoría de Seguros",
-      btnCall: "¿Inseguro? Reserva una Llamada de 15 Min",
+      btnCall: "Reservar una Sesión",
       btnServices: "Ver Servicios",
     },
     about: {
