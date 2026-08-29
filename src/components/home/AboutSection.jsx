@@ -11,9 +11,6 @@ export default function AboutSection() {
 
   return (
     <section id="about" className="py-24 md:py-32 relative overflow-hidden" style={{ backgroundColor: "#F5F5F0" }}>
-      {/* Top blend — eases the seam from the hero fade into this section */}
-      <div className="absolute top-0 left-0 right-0 h-32 pointer-events-none" style={{ background: "linear-gradient(to bottom, #E8E8E0, transparent)" }} />
-
       {/* Watercolor accents */}
       <div className="absolute top-0 left-0 w-72 h-72 rounded-full pointer-events-none" style={{ background: "#D5E0D5", opacity: 0.3, filter: "blur(60px)" }} />
       <div className="absolute bottom-0 right-0 w-96 h-96 rounded-full pointer-events-none" style={{ background: "#D5E0D5", opacity: 0.25, filter: "blur(80px)" }} />
