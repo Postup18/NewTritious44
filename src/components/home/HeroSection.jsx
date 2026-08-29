@@ -22,7 +22,7 @@ export default function HeroSection() {
           alt="Healthy Mediterranean food spread on a wooden table"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/60" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-[#F5F5F0]" />
       </div>
 
       {/* Content */}
@@ -101,7 +101,7 @@ export default function HeroSection() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.2 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/60 hover:text-white transition-colors"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-[#87a96b] hover:text-[#5a7a47] transition-colors"
       >
         <motion.div
           animate={{ y: [0, 8, 0] }}
