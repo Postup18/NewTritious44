@@ -25,6 +25,7 @@ function SelectionStep({ onConfirm, t }) {
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [bookedSlots, setBookedSlots] = useState([]);
   const [loadingSlots, setLoadingSlots] = useState(false);
+  const [slotsError, setSlotsError] = useState(false);
   const [form, setForm] = useState({ client_name: "", client_email: "", client_phone: "", client_state: "" });
   const [selectedPackage, setSelectedPackage] = useState("kickstart");
 
@@ -32,11 +33,19 @@ function SelectionStep({ onConfirm, t }) {
     if (!date) return;
     setSelectedDate(date);
     setSelectedSlot(null);
+    setSlotsError(false);
     setLoadingSlots(true);
     const dateStr = format(date, "yyyy-MM-dd");
-    const existing = await base44.entities.Appointment.filter({ date: dateStr });
-    setBookedSlots(existing.map((a) => a.time_slot));
-    setLoadingSlots(false);
+    try {
+      const response = await base44.functions.invoke("getAvailableSlots", { date: dateStr });
+      setBookedSlots(response.data.bookedSlots || []);
+    } catch (err) {
+      console.warn("Failed to load availability:", err);
+      setSlotsError(true);
+      setBookedSlots([]);
+    } finally {
+      setLoadingSlots(false);
+    }
   };
 
   const canSubmit =
@@ -140,6 +149,10 @@ function SelectionStep({ onConfirm, t }) {
                 {loadingSlots ? (
                   <div className="flex items-center justify-center h-20">
                     <div className="w-5 h-5 border-2 border-t-transparent rounded-full animate-spin" style={{ borderColor: "#87a96b", borderTopColor: "transparent" }} />
+                  </div>
+                ) : slotsError ? (
+                  <div className="rounded-xl px-4 py-6 text-center text-sm" style={{ backgroundColor: "#fdf2f0", color: "#b5654a" }}>
+                    We couldn't load available times right now. Please try again or refresh the page.
                   </div>
                 ) : (
                   <div className="grid grid-cols-4 gap-2">
