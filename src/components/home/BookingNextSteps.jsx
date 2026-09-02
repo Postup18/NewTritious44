@@ -9,6 +9,11 @@ export default function BookingNextSteps() {
   useEffect(() => {
     let cancelled = false;
     (async () => {
+      // Only auto-redirect once per session — after that, let the user browse Home freely
+      if (sessionStorage.getItem("seen_booking_confirmed") === "true") {
+        setChecking(false);
+        return;
+      }
       try {
         const user = await base44.auth.me();
         if (!user?.email) { setChecking(false); return; }

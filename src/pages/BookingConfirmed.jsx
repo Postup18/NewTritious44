@@ -11,6 +11,8 @@ export default function BookingConfirmed() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Mark that we've shown the confirmation page, so Home won't keep redirecting back here
+    sessionStorage.setItem("seen_booking_confirmed", "true");
     let cancelled = false;
     (async () => {
       try {
