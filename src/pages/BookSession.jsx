@@ -20,7 +20,7 @@ const isUnavailableDay = (date) => {
 };
 
 // ─── Step 1: Selection ───────────────────────────────────────────────────────
-function SelectionStep({ onConfirm, t }) {
+function SelectionStep({ onConfirm, t, bookingError, onDismissError }) {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [bookedSlots, setBookedSlots] = useState([]);
@@ -59,6 +59,28 @@ function SelectionStep({ onConfirm, t }) {
 
   return (
     <form onSubmit={handleSubmit} className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
+      {/* Booking error banner */}
+      <AnimatePresence>
+        {bookingError && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            className="mb-8 rounded-xl px-5 py-4 flex items-start justify-between gap-3"
+            style={{ backgroundColor: "#fdf2f0", color: "#b5654a" }}
+          >
+            <p className="text-sm font-medium leading-relaxed">{bookingError}</p>
+            <button
+              type="button"
+              onClick={onDismissError}
+              className="text-sm font-medium opacity-70 hover:opacity-100 transition-opacity flex-shrink-0"
+            >
+              ✕
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Package Selection */}
       <div className="mb-10">
         <div className="flex items-center gap-2 mb-4">
@@ -431,22 +453,46 @@ export default function BookSession() {
   const { t } = useLanguage();
   const [step, setStep] = useState("selection"); // selection | processing | confirmation
   const [booking, setBooking] = useState(null);
+  const [bookingError, setBookingError] = useState(null);
 
   const handleConfirm = async ({ selectedDate, selectedSlot, form, selectedPackage }) => {
     setBooking({ selectedDate, selectedSlot, form, selectedPackage });
+    setBookingError(null);
     setStep("processing");
 
-    // Save appointment
-    await base44.entities.Appointment.create({
-      date: format(selectedDate, "yyyy-MM-dd"),
-      time_slot: selectedSlot,
-      client_name: form.client_name,
-      client_email: form.client_email,
-      client_phone: form.client_phone,
-      client_state: form.client_state,
-      appointment_type: "session",
-      status: "pending",
-    });
+    // Create the appointment through the secure backend function (service role).
+    let created = false;
+    try {
+      const response = await base44.functions.invoke("createBooking", {
+        date: format(selectedDate, "yyyy-MM-dd"),
+        time_slot: selectedSlot,
+        client_name: form.client_name,
+        client_email: form.client_email,
+        client_phone: form.client_phone,
+        client_state: form.client_state,
+        appointment_type: "session",
+        status: "pending",
+      });
+      if (response.data?.success) {
+        created = true;
+      } else if (response.status === 409) {
+        setBookingError("The time you selected was just booked by someone else. Please choose another time.");
+      } else {
+        setBookingError(response.data?.error || "We couldn't complete your booking right now. Please try again.");
+      }
+    } catch (err) {
+      const status = err?.response?.status;
+      if (status === 409) {
+        setBookingError("The time you selected was just booked by someone else. Please choose another time.");
+      } else {
+        setBookingError("We couldn't complete your booking right now. Please try again.");
+      }
+    }
+
+    if (!created) {
+      setStep("selection");
+      return;
+    }
 
     const dateFormatted = format(selectedDate, "EEEE, MMMM d, yyyy");
 
@@ -538,7 +584,12 @@ NewTritious Life LLC`;
       <AnimatePresence mode="wait">
         {step === "selection" && (
           <motion.div key="selection" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            <SelectionStep onConfirm={handleConfirm} t={t} />
+            <SelectionStep
+              onConfirm={handleConfirm}
+              t={t}
+              bookingError={bookingError}
+              onDismissError={() => setBookingError(null)}
+            />
           </motion.div>
         )}
         {step === "processing" && (
