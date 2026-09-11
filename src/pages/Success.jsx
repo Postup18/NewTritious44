@@ -30,7 +30,8 @@ export default function Success() {
   useEffect(() => {
     sessionStorage.removeItem("pendingCheckout");
     let cancelled = false;
-    (async () => {
+
+    const verify = async (attempt = 0) => {
       if (!sessionId) {
         setError("No checkout session was found.");
         setLoading(false);
@@ -38,21 +39,29 @@ export default function Success() {
       }
       try {
         const response = await base44.functions.invoke("verifyCheckout", { sessionId });
-        if (!cancelled) {
-          if (response.data?.paid && response.data?.appointment) {
-            setAppointment(response.data.appointment);
-          } else {
-            setError(response.data?.error || "Your payment could not be verified.");
-          }
+        if (cancelled) return;
+        if (response.data?.paid && response.data?.appointment) {
+          setAppointment(response.data.appointment);
+          setLoading(false);
+        } else if (attempt < 4) {
+          // Stripe may not have marked the session as paid yet — retry
+          setTimeout(() => verify(attempt + 1), 1500);
+        } else {
+          setError(response.data?.error || "Your payment could not be verified. Please contact us if you were charged.");
+          setLoading(false);
         }
       } catch (err) {
-        if (!cancelled) {
+        if (cancelled) return;
+        if (attempt < 4) {
+          setTimeout(() => verify(attempt + 1), 1500);
+        } else {
           setError(err?.response?.data?.error || "Failed to verify your payment. Please contact us if you were charged.");
+          setLoading(false);
         }
-      } finally {
-        if (!cancelled) setLoading(false);
       }
-    })();
+    };
+
+    verify();
     return () => { cancelled = true; };
   }, [sessionId]);
 

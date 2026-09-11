@@ -35,7 +35,7 @@ export default async function(req: Request): Promise<Response> {
     }
 
     if (session.payment_status !== "paid") {
-      return Response.json({ paid: false, error: "Payment has not been completed." }, { status: 402 });
+      return Response.json({ paid: false, error: "Payment has not been completed yet." }, { status: 200 });
     }
 
     const appointmentId = session.metadata?.appointmentId;
