@@ -15,6 +15,7 @@ import IntakeChat from './pages/IntakeChat';
 import YaelBotChat from './pages/YaelBotChat';
 import FreeCall from './pages/FreeCall';
 import BookingConfirmed from './pages/BookingConfirmed';
+import Success from './pages/Success';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -52,6 +53,7 @@ const AuthenticatedApp = () => {
       <Route path="/yael-bot" element={<YaelBotChat />} />
       <Route path="/free-call" element={<FreeCall />} />
       <Route path="/booking-confirmed" element={<BookingConfirmed />} />
+      <Route path="/success" element={<Success />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

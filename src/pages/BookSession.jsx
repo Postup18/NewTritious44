@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Calendar as CalendarIcon, Clock, CheckCircle, Leaf, ArrowLeft, User, Mail, Phone, MapPin } from "lucide-react";
+import { Calendar as CalendarIcon, Clock, CheckCircle, Leaf, ArrowLeft, User, Mail, Phone, MapPin, Lock } from "lucide-react";
 import { format, isBefore, startOfDay } from "date-fns";
 import { base44 } from "@/api/base44Client";
 import { Calendar } from "@/components/ui/calendar";
@@ -20,7 +20,7 @@ const isUnavailableDay = (date) => {
 };
 
 // ─── Step 1: Selection ───────────────────────────────────────────────────────
-function SelectionStep({ onConfirm, t, bookingError, onDismissError }) {
+function SelectionStep({ onConfirm, t, bookingError, onDismissError, pendingRetry, onRetryCheckout, onDismissRetry }) {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [bookedSlots, setBookedSlots] = useState([]);
@@ -73,6 +73,38 @@ function SelectionStep({ onConfirm, t, bookingError, onDismissError }) {
             <button
               type="button"
               onClick={onDismissError}
+              className="text-sm font-medium opacity-70 hover:opacity-100 transition-opacity flex-shrink-0"
+            >
+              ✕
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Payment incomplete notice (returning from cancelled Stripe checkout) */}
+      <AnimatePresence>
+        {pendingRetry && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            className="mb-8 rounded-xl px-5 py-4 flex items-start justify-between gap-3"
+            style={{ backgroundColor: "#fef9e7", color: "#8a6d1f" }}
+          >
+            <div className="flex-1">
+              <p className="text-sm font-medium leading-relaxed mb-3">Payment incomplete — your selected time slot is still held. Complete checkout to confirm your booking.</p>
+              <button
+                type="button"
+                onClick={onRetryCheckout}
+                className="px-5 py-2 rounded-full text-sm font-semibold text-white transition-opacity hover:opacity-90"
+                style={{ backgroundColor: "#87a96b" }}
+              >
+                Complete Checkout
+              </button>
+            </div>
+            <button
+              type="button"
+              onClick={onDismissRetry}
               className="text-sm font-medium opacity-70 hover:opacity-100 transition-opacity flex-shrink-0"
             >
               ✕
@@ -296,23 +328,22 @@ function SelectionStep({ onConfirm, t, bookingError, onDismissError }) {
               />
             </div>
 
-            {/* Payment info box */}
-            <div
-              className="rounded-xl px-4 py-3.5 text-xs leading-relaxed"
-              style={{ backgroundColor: "#f0f5ec", color: "#5a7a47" }}
-            >
-              💳 <strong>{t.bookSession.paymentInfo.split(":")[0]}:</strong> {t.bookSession.paymentInfo.split(":").slice(1).join(":").trim()}
+            {/* Secure checkout notice */}
+            <div className="flex items-center gap-2 rounded-xl px-4 py-3.5 text-xs leading-relaxed" style={{ backgroundColor: "#f0f5ec", color: "#5a7a47" }}>
+              <Lock className="w-3.5 h-3.5 flex-shrink-0" />
+              <span>Secure checkout via Stripe — your payment is processed safely after you request your booking.</span>
             </div>
 
             <button
               type="submit"
               disabled={!canSubmit}
-              className="w-full py-3.5 rounded-full text-sm font-semibold text-white transition-all duration-300"
+              className="w-full py-3.5 rounded-full text-sm font-semibold text-white transition-all duration-300 flex items-center justify-center gap-2"
               style={{
                 backgroundColor: canSubmit ? "#87a96b" : "#c5d9b8",
                 cursor: canSubmit ? "pointer" : "not-allowed",
               }}
             >
+              <Lock className="w-3.5 h-3.5" />
               {t.bookSession.requestBooking}
             </button>
 
@@ -337,7 +368,7 @@ function ProcessingStep({ t }) {
         className="w-12 h-12 rounded-full border-4 border-t-transparent"
         style={{ borderColor: "#87a96b", borderTopColor: "transparent" }}
       />
-      <p className="text-gray-500 text-sm font-medium">{t.bookSession.processing}</p>
+      <p className="text-gray-500 text-sm font-medium">Redirecting to secure checkout…</p>
     </div>
   );
 }
@@ -451,17 +482,60 @@ function ConfirmationStep({ selectedDate, selectedSlot, form, selectedPackage, o
 export default function BookSession() {
   const navigate = useNavigate();
   const { t } = useLanguage();
-  const [step, setStep] = useState("selection"); // selection | processing | confirmation
+  const [step, setStep] = useState("selection"); // selection | processing
   const [booking, setBooking] = useState(null);
   const [bookingError, setBookingError] = useState(null);
+  const [pendingRetry, setPendingRetry] = useState(null);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("checkout") === "cancelled") {
+      const stored = sessionStorage.getItem("pendingCheckout");
+      if (stored) {
+        try { setPendingRetry(JSON.parse(stored)); } catch {}
+      }
+    }
+  }, []);
+
+  const handleRetryCheckout = async () => {
+    if (!pendingRetry) return;
+    if (window.self !== window.top) {
+      setBookingError("Checkout works only from the published app. Please open the app in a new tab.");
+      return;
+    }
+    setStep("processing");
+    try {
+      const checkoutResponse = await base44.functions.invoke("createCheckoutSession", {
+        packageId: pendingRetry.packageId,
+        appointmentId: pendingRetry.appointmentId,
+        origin: window.location.origin,
+      });
+      const url = checkoutResponse.data?.url;
+      if (url) {
+        window.location.href = url;
+      } else {
+        setBookingError("Couldn't restart checkout. Please try booking again.");
+        setStep("selection");
+      }
+    } catch (err) {
+      setBookingError("Couldn't restart checkout. Please try booking again.");
+      setStep("selection");
+    }
+  };
 
   const handleConfirm = async ({ selectedDate, selectedSlot, form, selectedPackage }) => {
+    // Block checkout inside the builder iframe preview
+    if (window.self !== window.top) {
+      setBookingError("Checkout works only from the published app. Please open the app in a new tab to complete your booking.");
+      return;
+    }
+
     setBooking({ selectedDate, selectedSlot, form, selectedPackage });
     setBookingError(null);
     setStep("processing");
 
-    // Create the appointment through the secure backend function (service role).
-    let created = false;
+    // Step 1: Create the pending appointment through the secure backend function
+    let appointmentId;
     try {
       const response = await base44.functions.invoke("createBooking", {
         date: format(selectedDate, "yyyy-MM-dd"),
@@ -474,11 +548,15 @@ export default function BookSession() {
         status: "pending",
       });
       if (response.data?.success) {
-        created = true;
+        appointmentId = response.data.appointmentId;
       } else if (response.status === 409) {
         setBookingError("The time you selected was just booked by someone else. Please choose another time.");
+        setStep("selection");
+        return;
       } else {
         setBookingError(response.data?.error || "We couldn't complete your booking right now. Please try again.");
+        setStep("selection");
+        return;
       }
     } catch (err) {
       const status = err?.response?.status;
@@ -487,59 +565,32 @@ export default function BookSession() {
       } else {
         setBookingError("We couldn't complete your booking right now. Please try again.");
       }
-    }
-
-    if (!created) {
       setStep("selection");
       return;
     }
 
-    const dateFormatted = format(selectedDate, "EEEE, MMMM d, yyyy");
+    // Store pending checkout so we can retry if the client abandons payment
+    sessionStorage.setItem("pendingCheckout", JSON.stringify({ appointmentId, packageId: selectedPackage }));
 
-    // Send immediate booking confirmation to the client
-    const confirmBody = `Hi ${form.client_name},
-
-Your consultation slot is reserved for ${dateFormatted} at ${selectedSlot}!
-
-1. Payment Instructions: Please complete your payment to finalize your booking:
-• Venmo: @NewTritious-Life
-• Zelle: ylaniado@hotmail.com (Please include your full name in the payment memo)
-
-2. Your Intake Form
-To help me prepare for our time together, please complete your health history intake form here:
-https://nurture-flow-diet.base44.app/intake
-
-3. Need to Change Your Time?
-If you need to adjust or cancel your reservation, you can email to: Newtritious.life@gmail.com
-(Note: Cancellations or reschedules made less than 24 hours before your session are subject to a $75 fee).
-
-What happens next?
-Once your payment is processed, your session is officially confirmed! You will receive a separate reminder email 24 hours before our meeting that will include your secure Google Meet video link.
-
-If you have any questions, feel free to reply to this email. I look forward to working with you!
-
-Warmly,
-Yael Laniado, RD
-NewTritious Life LLC`;
-
-    base44.integrations.Core.SendEmail({
-      to: form.client_email,
-      from_name: "Newtritious",
-      subject: "Your Session is Confirmed! – Preparation Details & Links",
-      body: confirmBody,
-    }).catch((err) => console.warn("Client confirmation email failed:", err));
-
-    // Notify Yael of the new booking
-    base44.integrations.Core.SendEmail({
-      to: "Newtritious.life@gmail.com",
-      from_name: "NewTritious Life Booking",
-      subject: `New Booking: ${form.client_name} — ${dateFormatted} at ${selectedSlot}`,
-      body: `New Booking Alert:\n\n${form.client_name} has scheduled a session for ${dateFormatted} at ${selectedSlot}.\nEmail: ${form.client_email}\nPhone: ${form.client_phone}\nState: ${form.client_state}`,
-    }).catch((err) => console.warn("Admin email failed:", err));
-
-    // 1.5s processing state
-    await new Promise((r) => setTimeout(r, 1500));
-    setStep("confirmation");
+    // Step 2: Create the Stripe checkout session and redirect
+    try {
+      const checkoutResponse = await base44.functions.invoke("createCheckoutSession", {
+        packageId: selectedPackage,
+        appointmentId,
+        origin: window.location.origin,
+      });
+      const url = checkoutResponse.data?.url;
+      if (url) {
+        window.location.href = url;
+      } else {
+        setBookingError(checkoutResponse.data?.error || "Couldn't start secure checkout. Please try again.");
+        setStep("selection");
+      }
+    } catch (err) {
+      console.warn("Checkout session failed:", err);
+      setBookingError("Couldn't start secure checkout. Please try again.");
+      setStep("selection");
+    }
   };
 
   const handleReset = () => {
@@ -589,6 +640,9 @@ NewTritious Life LLC`;
               t={t}
               bookingError={bookingError}
               onDismissError={() => setBookingError(null)}
+              pendingRetry={pendingRetry}
+              onRetryCheckout={handleRetryCheckout}
+              onDismissRetry={() => setPendingRetry(null)}
             />
           </motion.div>
         )}
@@ -597,18 +651,7 @@ NewTritious Life LLC`;
             <ProcessingStep t={t} />
           </motion.div>
         )}
-        {step === "confirmation" && booking && (
-          <motion.div key="confirmation" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            <ConfirmationStep
-              selectedDate={booking.selectedDate}
-              selectedSlot={booking.selectedSlot}
-              form={booking.form}
-              selectedPackage={booking.selectedPackage}
-              onReset={handleReset}
-              t={t}
-            />
-          </motion.div>
-        )}
+
       </AnimatePresence>
     </div>
   );
