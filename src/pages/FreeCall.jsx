@@ -345,17 +345,27 @@ export default function FreeCall() {
     setBooking({ selectedDate, selectedSlot, form });
     setStep("processing");
 
-    // Save appointment
-    await base44.entities.Appointment.create({
-      date: format(selectedDate, "yyyy-MM-dd"),
-      time_slot: selectedSlot,
-      client_name: form.client_name,
-      client_email: form.client_email,
-      client_phone: form.client_phone,
-      client_state: form.client_state,
-      appointment_type: "free_call",
-      status: "pending",
-    });
+    // Save appointment via secure backend function (bypasses RLS for public visitors)
+    try {
+      const response = await base44.functions.invoke("createBooking", {
+        date: format(selectedDate, "yyyy-MM-dd"),
+        time_slot: selectedSlot,
+        client_name: form.client_name,
+        client_email: form.client_email,
+        client_phone: form.client_phone,
+        client_state: form.client_state,
+        appointment_type: "free_call",
+        status: "pending",
+      });
+      if (!response.data?.success) {
+        setStep("selection");
+        return;
+      }
+    } catch (err) {
+      console.warn("Free call booking failed:", err);
+      setStep("selection");
+      return;
+    }
 
     const dateFormatted = format(selectedDate, "EEEE, MMMM d, yyyy");
 
