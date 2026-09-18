@@ -331,7 +331,7 @@ function SelectionStep({ onConfirm, t, bookingError, onDismissError, pendingRetr
             {/* Secure checkout notice */}
             <div className="flex items-center gap-2 rounded-xl px-4 py-3.5 text-xs leading-relaxed" style={{ backgroundColor: "#f0f5ec", color: "#5a7a47" }}>
               <Lock className="w-3.5 h-3.5 flex-shrink-0" />
-              <span>Secure checkout via Stripe — your payment is processed safely after you request your booking.</span>
+              <span>Secure checkout via Stripe or Venmo (@NewTritious-Life) — your payment is processed safely after you request your booking.</span>
             </div>
 
             <button
