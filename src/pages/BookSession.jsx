@@ -8,11 +8,13 @@ import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/lib/i18n";
 
 const TIME_SLOTS = [
-  "9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM",
+  "8:00 AM", "9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM",
   "11:00 AM", "11:30 AM", "12:00 PM",
   "2:00 PM", "2:30 PM", "3:00 PM", "3:30 PM",
-  "4:00 PM", "4:30 PM", "5:00 PM",
+  "4:00 PM", "4:30 PM", "5:00 PM", "5:30 PM", "6:00 PM",
 ];
+
+const AVAILABLE_SLOTS = ["8:00 AM", "4:00 PM", "5:00 PM", "6:00 PM"];
 
 const isUnavailableDay = (date) => {
   const day = date.getDay();
@@ -211,22 +213,22 @@ function SelectionStep({ onConfirm, t, bookingError, onDismissError, pendingRetr
                 ) : (
                   <div className="grid grid-cols-4 gap-2">
                     {TIME_SLOTS.map((slot) => {
-                      const booked = bookedSlots.includes(slot);
+                      const unavailable = bookedSlots.includes(slot) || !AVAILABLE_SLOTS.includes(slot);
                       const active = selectedSlot === slot;
                       return (
                         <button
                           key={slot}
                           type="button"
-                          disabled={booked}
+                          disabled={unavailable}
                           onClick={() => setSelectedSlot(slot)}
                           className={`py-2 px-1 rounded-xl text-xs font-medium border transition-all duration-200
-                            ${booked
+                            ${unavailable
                               ? "bg-gray-50 text-gray-300 border-gray-100 cursor-not-allowed line-through"
                               : active
                                 ? "text-white border-transparent shadow-sm"
                                 : "bg-white text-gray-700 border-gray-200 hover:border-opacity-80"
                             }`}
-                          style={active ? { backgroundColor: "#87a96b", borderColor: "#87a96b" } : !booked ? { borderColor: "#e5e7eb" } : {}}
+                          style={active ? { backgroundColor: "#87a96b", borderColor: "#87a96b" } : !unavailable ? { borderColor: "#e5e7eb" } : {}}
                         >
                           {slot}
                         </button>
