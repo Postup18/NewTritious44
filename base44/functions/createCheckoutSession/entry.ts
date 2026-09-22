@@ -34,7 +34,7 @@ export default async function(req: Request): Promise<Response> {
 
     const params = new URLSearchParams();
     params.append("mode", "payment");
-    params.append("payment_method_types[0]", "card");
+    params.append("payment_method_configuration", "pmc_1UIYXEGcjxebiOVK0ZBEv41A");
     params.append("success_url", `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}`);
     params.append("cancel_url", `${baseUrl}/book-session?checkout=cancelled`);
     params.append("line_items[0][quantity]", "1");
