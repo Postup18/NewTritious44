@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Calendar as CalendarIcon, Clock, CheckCircle, Leaf, ArrowLeft, User, Mail, Phone, MapPin, Lock } from "lucide-react";
+import { Calendar as CalendarIcon, Clock, CheckCircle, Leaf, ArrowLeft, User, Mail, Phone, MapPin, Lock, CreditCard, Wallet } from "lucide-react";
 import { format, isBefore, startOfDay } from "date-fns";
 import { base44 } from "@/api/base44Client";
 import { Calendar } from "@/components/ui/calendar";
@@ -30,6 +30,7 @@ function SelectionStep({ onConfirm, t, bookingError, onDismissError, pendingRetr
   const [slotsError, setSlotsError] = useState(false);
   const [form, setForm] = useState({ client_name: "", client_email: "", client_phone: "", client_state: "" });
   const [selectedPackage, setSelectedPackage] = useState("kickstart");
+  const [paymentMethod, setPaymentMethod] = useState("card");
 
   const handleDateSelect = async (date) => {
     if (!date) return;
@@ -56,7 +57,7 @@ function SelectionStep({ onConfirm, t, bookingError, onDismissError, pendingRetr
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!canSubmit) return;
-    onConfirm({ selectedDate, selectedSlot, form, selectedPackage });
+    onConfirm({ selectedDate, selectedSlot, form, selectedPackage, paymentMethod });
   };
 
   return (
@@ -330,10 +331,49 @@ function SelectionStep({ onConfirm, t, bookingError, onDismissError, pendingRetr
               />
             </div>
 
+            {/* Payment method selector */}
+            <div>
+              <label className="block text-xs text-gray-500 uppercase tracking-wider mb-1.5 font-medium">
+                Payment Method
+              </label>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={() => setPaymentMethod("card")}
+                  className={`flex items-center gap-2.5 rounded-xl p-3.5 border-2 transition-all duration-200 text-left ${paymentMethod === "card" ? "shadow-sm" : "border-gray-200 hover:border-gray-300"}`}
+                  style={paymentMethod === "card" ? { borderColor: "#87a96b", backgroundColor: "#f0f5ec" } : { backgroundColor: "#fafaf8" }}
+                >
+                  <CreditCard className="w-5 h-5 flex-shrink-0" style={{ color: "#87a96b" }} />
+                  <div>
+                    <p className="text-sm font-semibold text-gray-800">Card</p>
+                    <p className="text-[11px] text-gray-400">Visa, MC, Amex</p>
+                  </div>
+                  {paymentMethod === "card" && (
+                    <CheckCircle className="w-4 h-4 ml-auto flex-shrink-0" style={{ color: "#87a96b" }} />
+                  )}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPaymentMethod("venmo")}
+                  className={`flex items-center gap-2.5 rounded-xl p-3.5 border-2 transition-all duration-200 text-left ${paymentMethod === "venmo" ? "shadow-sm" : "border-gray-200 hover:border-gray-300"}`}
+                  style={paymentMethod === "venmo" ? { borderColor: "#87a96b", backgroundColor: "#f0f5ec" } : { backgroundColor: "#fafaf8" }}
+                >
+                  <Wallet className="w-5 h-5 flex-shrink-0" style={{ color: "#87a96b" }} />
+                  <div>
+                    <p className="text-sm font-semibold text-gray-800">Venmo</p>
+                    <p className="text-[11px] text-gray-400">@NewTritious-Life</p>
+                  </div>
+                  {paymentMethod === "venmo" && (
+                    <CheckCircle className="w-4 h-4 ml-auto flex-shrink-0" style={{ color: "#87a96b" }} />
+                  )}
+                </button>
+              </div>
+            </div>
+
             {/* Secure checkout notice */}
             <div className="flex items-center gap-2 rounded-xl px-4 py-3.5 text-xs leading-relaxed" style={{ backgroundColor: "#f0f5ec", color: "#5a7a47" }}>
               <Lock className="w-3.5 h-3.5 flex-shrink-0" />
-              <span>Secure checkout via Stripe or Venmo (@NewTritious-Life) — your payment is processed safely after you request your booking.</span>
+              <span>Secure checkout via {paymentMethod === "card" ? "Stripe" : "Venmo (@NewTritious-Life)"} — your payment is processed safely after you request your booking.</span>
             </div>
 
             <button
@@ -480,6 +520,88 @@ function ConfirmationStep({ selectedDate, selectedSlot, form, selectedPackage, o
   );
 }
 
+// ─── Step: Venmo Instructions ──────────────────────────────────────────────────
+function VenmoInstructionsStep({ selectedDate, selectedSlot, form, selectedPackage, t }) {
+  const navigate = useNavigate();
+  const pkg = t.bookSession.packages.find((p) => p.id === selectedPackage) || t.bookSession.packages[0];
+  return (
+    <div className="flex items-center justify-center min-h-[70vh] px-4 py-12">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.92 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="bg-white rounded-3xl border border-gray-100 shadow-lg p-10 max-w-md w-full text-center"
+      >
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+          className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"
+          style={{ backgroundColor: "#f0f5ec" }}
+        >
+          <Wallet className="w-10 h-10" style={{ color: "#87a96b" }} />
+        </motion.div>
+
+        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}>
+          <h2 className="font-heading text-2xl font-semibold text-gray-900 mb-2">Complete Your Venmo Payment</h2>
+          <p className="text-gray-500 text-sm mb-8 leading-relaxed">
+            Your session is reserved! Send your payment via Venmo to confirm your booking.
+          </p>
+
+          {/* Venmo details */}
+          <div className="rounded-2xl p-5 text-left space-y-4 mb-8" style={{ backgroundColor: "#f7faf4" }}>
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-gray-500">Venmo Handle</span>
+              <span className="text-sm font-bold text-gray-900 select-all">@NewTritious-Life</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-gray-500">Amount</span>
+              <span className="text-sm font-bold text-gray-900">{pkg.price}</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-gray-500">Package</span>
+              <span className="text-sm font-medium text-gray-800">{pkg.name}</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-gray-500">Date</span>
+              <span className="text-sm font-medium text-gray-800">{format(selectedDate, "EEEE, MMMM d")}</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-gray-500">Time</span>
+              <span className="text-sm font-medium text-gray-800">{selectedSlot}</span>
+            </div>
+          </div>
+
+          <div className="rounded-xl p-4 mb-6 text-left" style={{ backgroundColor: "#f0f5ec" }}>
+            <p className="text-xs text-gray-600 leading-relaxed">
+              <strong className="text-gray-700">Instructions:</strong> Open Venmo, send {pkg.price} to <strong>@NewTritious-Life</strong>, and include your name and session date in the note. Once your payment is received, you'll get a confirmation email with your secure Google Meet link.
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-3">
+            <button
+              onClick={() => navigate("/")}
+              className="flex-1 py-3 rounded-full border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
+            >
+              {t.bookSession.returnHome}
+            </button>
+            <a
+              href="https://venmo.com/NewTritious-Life"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 py-3 rounded-full text-sm font-semibold text-white transition-opacity hover:opacity-90 flex items-center justify-center gap-2"
+              style={{ backgroundColor: "#87a96b" }}
+            >
+              <Wallet className="w-4 h-4" />
+              Open Venmo
+            </a>
+          </div>
+        </motion.div>
+      </motion.div>
+    </div>
+  );
+}
+
 // ─── Main Page ────────────────────────────────────────────────────────────────
 export default function BookSession() {
   const navigate = useNavigate();
@@ -525,7 +647,7 @@ export default function BookSession() {
     }
   };
 
-  const handleConfirm = async ({ selectedDate, selectedSlot, form, selectedPackage }) => {
+  const handleConfirm = async ({ selectedDate, selectedSlot, form, selectedPackage, paymentMethod }) => {
     // Block checkout inside the builder iframe preview
     if (window.self !== window.top) {
       setBookingError("Checkout works only from the published app. Please open the app in a new tab to complete your booking.");
@@ -568,6 +690,13 @@ export default function BookSession() {
         setBookingError("We couldn't complete your booking right now. Please try again.");
       }
       setStep("selection");
+      return;
+    }
+
+    // Venmo path: skip Stripe, show Venmo instructions instead
+    if (paymentMethod === "venmo") {
+      setBooking({ selectedDate, selectedSlot, form, selectedPackage, paymentMethod });
+      setStep("venmo_instructions");
       return;
     }
 
@@ -651,6 +780,17 @@ export default function BookSession() {
         {step === "processing" && (
           <motion.div key="processing" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <ProcessingStep t={t} />
+          </motion.div>
+        )}
+        {step === "venmo_instructions" && booking && (
+          <motion.div key="venmo" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <VenmoInstructionsStep
+              selectedDate={booking.selectedDate}
+              selectedSlot={booking.selectedSlot}
+              form={booking.form}
+              selectedPackage={booking.selectedPackage}
+              t={t}
+            />
           </motion.div>
         )}
 
