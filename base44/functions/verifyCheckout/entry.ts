@@ -1,6 +1,7 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.44';
 import { secrets } from 'base44:runtime';
 import { format, parseISO } from 'npm:date-fns@3.6.0';
+import { sendResendEmail } from "../../shared/resendEmail.ts";
 
 export default async function(req: Request): Promise<Response> {
   try {
@@ -79,20 +80,18 @@ Warmly,
 Yael Laniado, RD
 NewTritious Life LLC`;
 
-      base44.asServiceRole.integrations.Core.SendEmail({
+      await sendResendEmail({
         to: appointment.client_email,
-        from_name: "NewTritious",
         subject: "Your Session is Confirmed! – Preparation Details & Links",
-        body: clientBody,
-      }).catch((err: any) => console.warn("Client confirmation email failed:", err));
+        text: clientBody,
+      });
 
       // Notify Yael of the confirmed booking
-      base44.asServiceRole.integrations.Core.SendEmail({
+      await sendResendEmail({
         to: "Newtritious.life@gmail.com",
-        from_name: "NewTritious Life Booking",
         subject: `New Booking: ${appointment.client_name} — ${dateFormatted} at ${appointment.time_slot}`,
-        body: `New Booking Alert (Paid & Confirmed):\n\n${appointment.client_name} has scheduled a session for ${dateFormatted} at ${appointment.time_slot}.\nEmail: ${appointment.client_email}\nPhone: ${appointment.client_phone}\nState: ${appointment.client_state}`,
-      }).catch((err: any) => console.warn("Admin email failed:", err));
+        text: `New Booking Alert (Paid & Confirmed):\n\n${appointment.client_name} has scheduled a session for ${dateFormatted} at ${appointment.time_slot}.\nEmail: ${appointment.client_email}\nPhone: ${appointment.client_phone}\nState: ${appointment.client_state}`,
+      });
     }
 
     return Response.json({
