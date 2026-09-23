@@ -347,7 +347,8 @@ export default function FreeCall() {
     setBooking({ selectedDate, selectedSlot, form });
     setStep("processing");
 
-    // Save appointment via secure backend function (bypasses RLS for public visitors)
+    // Save appointment + send confirmation emails via secure backend function
+    // (server-side so anonymous visitors without client permissions still get emails)
     try {
       const response = await base44.functions.invoke("createBooking", {
         date: format(selectedDate, "yyyy-MM-dd"),
@@ -368,27 +369,6 @@ export default function FreeCall() {
       setStep("selection");
       return;
     }
-
-    const dateFormatted = format(selectedDate, "EEEE, MMMM d, yyyy");
-
-    // Invite the client so they become a registered user (enables future emails to them)
-    base44.users.inviteUser(form.client_email, "user").catch(() => {});
-
-    // Notify Yael of the new free call booking
-    base44.integrations.Core.SendEmail({
-      to: "Newtritious.life@gmail.com",
-      from_name: "NewTritious Life Booking",
-      subject: `New Free Call Booking: ${form.client_name} — ${dateFormatted} at ${selectedSlot}`,
-      body: `New Free Call Booking Alert:\n\n${form.client_name} has scheduled a free 15-minute discovery call for ${dateFormatted} at ${selectedSlot}.\nEmail: ${form.client_email}\nPhone: ${form.client_phone}\nState: ${form.client_state}`,
-    }).catch((err) => console.warn("Admin email failed (user may not be registered):", err));
-
-    // Send confirmation to client
-    base44.integrations.Core.SendEmail({
-      to: form.client_email,
-      from_name: "NewTritious Life",
-      subject: `Confirmed: Your 15-Minute Discovery Call with NewTritious Life`,
-      body: `Hi ${form.client_name},\n\nYour free 15-minute discovery call is officially booked! I'm looking forward to connecting with you, hearing about your goals, and seeing how we can best support your health journey.\n\nCall Details:\n• Date: ${dateFormatted}\n• Time: ${selectedSlot} – ${selectedSlot} EST\n• Where: Google Meet (Secure Video Link)\n\n👉 Join Video Call: meet.google.com/abc-defg-hij\n\nNeed to reschedule or cancel? You can manage your appointment anytime using the link below:\n[Reschedule / Cancel Appointment Link]\n\nWarmly,\nYael Laniado, RD\nNewTritious Life LLC`,
-    }).catch((err) => console.warn("Client email failed (user may not be registered):", err));
 
     // 1.5s processing state
     await new Promise((r) => setTimeout(r, 1500));
