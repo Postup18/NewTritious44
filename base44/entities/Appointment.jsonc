@@ -49,6 +49,15 @@
       ],
       "default": "pending",
       "description": "Status of the appointment"
+    },
+    "language": {
+      "type": "string",
+      "enum": [
+        "en",
+        "es"
+      ],
+      "default": "en",
+      "description": "Language the client was using when booking (for localized confirmation emails)"
     }
   },
   "required": [

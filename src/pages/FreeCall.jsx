@@ -339,7 +339,7 @@ function ConfirmationStep({ selectedDate, selectedSlot, form, onReset, t }) {
 // ─── Main Page ────────────────────────────────────────────────────────────────
 export default function FreeCall() {
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [step, setStep] = useState("selection"); // selection | processing | confirmation
   const [booking, setBooking] = useState(null);
 
@@ -359,6 +359,7 @@ export default function FreeCall() {
         client_state: form.client_state,
         appointment_type: "free_call",
         status: "pending",
+        language: lang,
       });
       if (!response.data?.success) {
         setStep("selection");

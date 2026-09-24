@@ -18,9 +18,11 @@ import {
 import { format, parseISO } from "date-fns";
 import { base44 } from "@/api/base44Client";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useLanguage } from "@/lib/i18n";
 
 export default function Success() {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [searchParams] = useSearchParams();
   const sessionId = searchParams.get("session_id");
   const [loading, setLoading] = useState(true);
@@ -73,11 +75,11 @@ export default function Success() {
   const Header = () => (
     <div className="bg-white border-b border-gray-100 py-5 px-6 flex items-center justify-between max-w-5xl mx-auto">
       <button onClick={() => navigate("/")} className="flex items-center gap-2 text-gray-500 hover:text-gray-800 transition-colors text-sm">
-        <ArrowLeft className="w-4 h-4" /> Back
+        <ArrowLeft className="w-4 h-4" /> {t.success.back}
       </button>
       <button onClick={() => navigate("/")} className="flex items-center gap-2">
         <Leaf className="w-5 h-5" style={{ color: "#87a96b" }} />
-        <span className="font-heading text-lg font-semibold text-gray-900">NewTritious Life</span>
+        <span className="font-heading text-lg font-semibold text-gray-900">{t.success.brand}</span>
       </button>
       <div className="w-16" />
     </div>
@@ -88,7 +90,7 @@ export default function Success() {
       <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: "#f7f9f6" }}>
         <div className="flex flex-col items-center gap-4">
           <div className="w-8 h-8 border-4 border-gray-200 border-t-[#87a96b] rounded-full animate-spin" />
-          <p className="text-sm text-gray-500">Confirming your payment…</p>
+          <p className="text-sm text-gray-500">{t.success.confirming}</p>
         </div>
       </div>
     );
@@ -100,14 +102,14 @@ export default function Success() {
         <Header />
         <div className="flex flex-col items-center justify-center min-h-[60vh] px-4 text-center max-w-md mx-auto">
           <AlertCircle className="w-12 h-12 mb-4" style={{ color: "#b5654a" }} />
-          <h1 className="font-heading text-2xl font-semibold text-gray-900 mb-2">Something Went Wrong</h1>
-          <p className="text-gray-500 text-sm mb-6">{error || "We couldn't confirm your booking."}</p>
+          <h1 className="font-heading text-2xl font-semibold text-gray-900 mb-2">{t.success.errorTitle}</h1>
+          <p className="text-gray-500 text-sm mb-6">{error || t.success.errorDefault}</p>
           <button
             onClick={() => navigate("/")}
             className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold text-white"
             style={{ backgroundColor: "#87a96b" }}
           >
-            <Home className="w-4 h-4" /> Return Home
+            <Home className="w-4 h-4" /> {t.success.returnHome}
           </button>
         </div>
       </div>
@@ -135,9 +137,9 @@ export default function Success() {
           >
             <CheckCircle className="w-10 h-10" style={{ color: "#87a96b" }} />
           </motion.div>
-          <h1 className="font-heading text-3xl font-semibold text-gray-900 mb-2">Your Session is Confirmed</h1>
+          <h1 className="font-heading text-3xl font-semibold text-gray-900 mb-2">{t.success.title}</h1>
           <p className="text-gray-500 text-sm max-w-sm mx-auto">
-            Welcome, {appointment.client_name?.split(" ")[0]}! Your payment is complete and your session is reserved.
+            {t.success.welcome.replace("{name}", appointment.client_name?.split(" ")[0] || "")}
           </p>
         </motion.div>
 
@@ -150,37 +152,37 @@ export default function Success() {
         >
           <h2 className="font-heading text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
             <CalendarIcon className="w-5 h-5" style={{ color: "#87a96b" }} />
-            Appointment Details
+            {t.success.appointmentDetails}
           </h2>
           <div className="space-y-3">
             <div className="flex items-center gap-3">
               <CalendarIcon className="w-4 h-4 flex-shrink-0 text-gray-400" />
-              <span className="text-sm text-gray-500 w-24">Date</span>
+              <span className="text-sm text-gray-500 w-24">{t.success.date}</span>
               <span className="text-sm font-medium text-gray-800">{dateFormatted}</span>
             </div>
             <div className="flex items-center gap-3">
               <Clock className="w-4 h-4 flex-shrink-0 text-gray-400" />
-              <span className="text-sm text-gray-500 w-24">Time</span>
+              <span className="text-sm text-gray-500 w-24">{t.success.time}</span>
               <span className="text-sm font-medium text-gray-800">{appointment.time_slot}</span>
             </div>
             <div className="flex items-center gap-3">
               <User className="w-4 h-4 flex-shrink-0 text-gray-400" />
-              <span className="text-sm text-gray-500 w-24">Name</span>
+              <span className="text-sm text-gray-500 w-24">{t.success.name}</span>
               <span className="text-sm font-medium text-gray-800">{appointment.client_name}</span>
             </div>
             <div className="flex items-center gap-3">
               <Mail className="w-4 h-4 flex-shrink-0 text-gray-400" />
-              <span className="text-sm text-gray-500 w-24">Email</span>
+              <span className="text-sm text-gray-500 w-24">{t.success.email}</span>
               <span className="text-sm font-medium text-gray-800">{appointment.client_email}</span>
             </div>
             <div className="flex items-center gap-3">
               <Phone className="w-4 h-4 flex-shrink-0 text-gray-400" />
-              <span className="text-sm text-gray-500 w-24">Phone</span>
+              <span className="text-sm text-gray-500 w-24">{t.success.phone}</span>
               <span className="text-sm font-medium text-gray-800">{appointment.client_phone}</span>
             </div>
             <div className="flex items-center gap-3">
               <MapPin className="w-4 h-4 flex-shrink-0 text-gray-400" />
-              <span className="text-sm text-gray-500 w-24">State</span>
+              <span className="text-sm text-gray-500 w-24">{t.success.state}</span>
               <span className="text-sm font-medium text-gray-800">{appointment.client_state}</span>
             </div>
           </div>
@@ -195,17 +197,17 @@ export default function Success() {
         >
           <div className="flex items-center gap-3 mb-4">
             <ClipboardList className="w-5 h-5" style={{ color: "#87a96b" }} />
-            <h2 className="font-heading text-lg font-semibold text-gray-900">Complete Your Intake Form</h2>
+            <h2 className="font-heading text-lg font-semibold text-gray-900">{t.success.intakeTitle}</h2>
           </div>
           <p className="text-sm text-gray-600 mb-4 leading-relaxed">
-            Complete your health history intake form so I can prepare for our time together. It only takes a few minutes.
+            {t.success.intakeDesc}
           </p>
           <button
             onClick={() => navigate("/intake")}
             className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold text-white transition-opacity hover:opacity-90"
             style={{ backgroundColor: "#87a96b" }}
           >
-            Start Intake Form <ArrowRight className="w-4 h-4" />
+            {t.success.startIntake} <ArrowRight className="w-4 h-4" />
           </button>
         </motion.div>
 
@@ -217,9 +219,9 @@ export default function Success() {
           className="rounded-2xl p-6 mb-6"
           style={{ backgroundColor: "#f0f5ec" }}
         >
-          <h3 className="font-heading text-base font-semibold mb-2" style={{ color: "#5a7a47" }}>What Happens Next?</h3>
+          <h3 className="font-heading text-base font-semibold mb-2" style={{ color: "#5a7a47" }}>{t.success.whatsNext}</h3>
           <p className="text-sm leading-relaxed" style={{ color: "#5a7a47" }}>
-            A confirmation email is on its way to you. You'll receive a reminder 24 hours before our meeting with your secure Google Meet video link.
+            {t.success.whatsNextDesc}
           </p>
         </motion.div>
 
@@ -229,12 +231,12 @@ export default function Success() {
             onClick={() => navigate("/")}
             className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
           >
-            <Home className="w-4 h-4" /> Return Home
+            <Home className="w-4 h-4" /> {t.success.returnHome}
           </button>
         </div>
 
         <p className="hidden md:block text-center text-xs text-gray-400 mt-6">
-          Need to change your time? Email <span className="font-medium text-gray-500">Newtritious.life@gmail.com</span>. Cancellations less than 24 hours before your session are subject to a $75 fee.
+          {t.success.changeTime} <span className="font-medium text-gray-500">Newtritious.life@gmail.com</span>. {t.success.cancellationFee}
         </p>
       </div>
 
@@ -244,14 +246,14 @@ export default function Success() {
           onClick={() => navigate("/")}
           className="flex-1 py-3 rounded-full border border-gray-200 text-sm font-medium text-gray-600"
         >
-          Home
+          {t.success.home}
         </button>
         <button
           onClick={() => navigate("/intake")}
           className="flex-[1.5] py-3 rounded-full text-sm font-semibold text-white"
           style={{ backgroundColor: "#87a96b" }}
         >
-          Complete Intake Form
+          {t.success.completeIntake}
         </button>
       </div>
     </div>

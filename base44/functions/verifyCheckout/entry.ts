@@ -1,7 +1,7 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.44';
 import { secrets } from 'base44:runtime';
-import { format, parseISO } from 'npm:date-fns@3.6.0';
 import { sendResendEmail } from "../../shared/resendEmail.ts";
+import { paidSessionClientEmail, paidSessionAdminEmail } from "../../shared/emailTemplates.ts";
 
 export default async function(req: Request): Promise<Response> {
   try {
@@ -53,44 +53,27 @@ export default async function(req: Request): Promise<Response> {
     if (appointment.status === "pending") {
       await base44.asServiceRole.entities.Appointment.update(appointmentId, { status: "confirmed" });
 
-      let dateFormatted = appointment.date;
-      try {
-        dateFormatted = format(parseISO(appointment.date), "EEEE, MMMM d, yyyy");
-      } catch {}
+      const lang = appointment.language === "es" ? "es" : "en";
 
       // Send client confirmation email
-      const clientBody = `Hi ${appointment.client_name},
-
-Your payment has been received and your consultation is officially confirmed for ${dateFormatted} at ${appointment.time_slot}!
-
-1. Your Intake Form
-To help me prepare for our time together, please complete your health history intake form here:
-https://nurture-flow-diet.base44.app/intake
-
-2. Need to Change Your Time?
-If you need to adjust or cancel your reservation, email: Newtritious.life@gmail.com
-(Note: Cancellations or reschedules made less than 24 hours before your session are subject to a $75 fee).
-
-What happens next?
-You will receive a reminder email 24 hours before our meeting that will include your secure Google Meet video link.
-
-If you have any questions, feel free to reply to this email. I look forward to working with you!
-
-Warmly,
-Yael Laniado, MS, RD, LD/N
-NewTritious Life LLC`;
-
+      const clientMail = paidSessionClientEmail(
+        appointment.client_name, appointment.date, appointment.time_slot, lang
+      );
       await sendResendEmail({
         to: appointment.client_email,
-        subject: "Your Session is Confirmed! – Preparation Details & Links",
-        text: clientBody,
+        subject: clientMail.subject,
+        text: clientMail.text,
       });
 
       // Notify Yael of the confirmed booking
+      const adminMail = paidSessionAdminEmail(
+        appointment.client_name, appointment.date, appointment.time_slot,
+        appointment.client_email, appointment.client_phone, appointment.client_state, lang
+      );
       await sendResendEmail({
         to: "Newtritious.life@gmail.com",
-        subject: `New Booking: ${appointment.client_name} — ${dateFormatted} at ${appointment.time_slot}`,
-        text: `New Booking Alert (Paid & Confirmed):\n\n${appointment.client_name} has scheduled a session for ${dateFormatted} at ${appointment.time_slot}.\nEmail: ${appointment.client_email}\nPhone: ${appointment.client_phone}\nState: ${appointment.client_state}`,
+        subject: adminMail.subject,
+        text: adminMail.text,
       });
     }
 

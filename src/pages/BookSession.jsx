@@ -605,7 +605,7 @@ function VenmoInstructionsStep({ selectedDate, selectedSlot, form, selectedPacka
 // ─── Main Page ────────────────────────────────────────────────────────────────
 export default function BookSession() {
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [step, setStep] = useState("selection"); // selection | processing
   const [booking, setBooking] = useState(null);
   const [bookingError, setBookingError] = useState(null);
@@ -670,6 +670,7 @@ export default function BookSession() {
         client_state: form.client_state,
         appointment_type: "session",
         status: "pending",
+        language: lang,
       });
       if (response.data?.success) {
         appointmentId = response.data.appointmentId;

@@ -1,4 +1,6 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.40';
+import { sendResendEmail } from "../../shared/resendEmail.ts";
+import { manualSessionClientEmail } from "../../shared/emailTemplates.ts";
 
 export default async function(req: Request): Promise<Response> {
   try {
@@ -29,54 +31,13 @@ export default async function(req: Request): Promise<Response> {
       return Response.json({ message: "Not a paid session, skipping confirmation" }, { status: 200 });
     }
 
-    // Format the date nicely
-    const dateObj = new Date(appt.date + "T00:00:00");
-    const dateFormatted = dateObj.toLocaleDateString("en-US", {
-      weekday: "long",
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-    });
+    const lang = appt.language === "es" ? "es" : "en";
+    const mail = manualSessionClientEmail(appt.client_name, appt.date, appt.time_slot, lang);
 
-    const emailBody = `Hi ${appt.client_name},
-
-    Your nutrition consultation is reserved for ${dateFormatted} at ${appt.time_slot}.
-    To finalize your booking, please complete these 2 steps:
-
-    ━━━━━━━━━━━━━━━━━━━━━━━━━
-    STEP 1 — Complete Your Payment
-    ━━━━━━━━━━━━━━━━━━━━━━━━━
-    Please send your session payment using one of the methods below:
-    • Venmo: @NewTritious-Life
-    • Zelle: ylaniado@hotmail.com
-    (Please include your full name in the payment memo)
-
-    ━━━━━━━━━━━━━━━━━━━━━━━━━
-    STEP 2 — Fill Out Your Intake Form
-    ━━━━━━━━━━━━━━━━━━━━━━━━━
-    To help me prepare for our time together, complete your health history intake form here:
-    🔗 https://nurture-flow-diet.base44.app/intake
-
-    ━━━━━━━━━━━━━━━━━━━━━━━━━
-    Need to Change Your Time?
-    ━━━━━━━━━━━━━━━━━━━━━━━━━
-    Email Newtritious.life@gmail.com to adjust or cancel your reservation.
-    (Note: Cancellations or reschedules made less than 24 hours before your session are subject to a $75 fee.)
-
-    What happens next?
-    Once your payment is processed, your session is officially confirmed! You'll receive a separate reminder email 24 hours before our meeting with your secure Google Meet video link.
-
-    If you have any questions, feel free to reply to this email. I look forward to working with you!
-
-    Warmly,
-    Yael Laniado, RD
-    NewTritious Life LLC`;
-
-    await base44.asServiceRole.integrations.Core.SendEmail({
+    await sendResendEmail({
       to: appt.client_email,
-      from_name: "NewTritious Life",
-      subject: `Your nutrition session is confirmed — ${dateFormatted}`,
-      body: emailBody,
+      subject: mail.subject,
+      text: mail.text,
     });
 
     return Response.json({ success: true, message: "Confirmation email sent" });

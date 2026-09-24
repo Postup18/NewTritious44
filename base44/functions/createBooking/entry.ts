@@ -1,5 +1,6 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.44';
 import { sendResendEmail } from "../../shared/resendEmail.ts";
+import { freeCallClientEmail, freeCallAdminEmail } from "../../shared/emailTemplates.ts";
 
 export default async function(req) {
   try {
@@ -15,6 +16,7 @@ export default async function(req) {
       client_state,
       appointment_type,
       status,
+      language,
     } = body || {};
 
     // Validate required fields
@@ -46,6 +48,8 @@ export default async function(req) {
       );
     }
 
+    const lang = language === "es" ? "es" : "en";
+
     // Create the appointment using the service role (bypasses RLS for public visitors)
     const created = await base44.asServiceRole.entities.Appointment.create({
       date,
@@ -56,29 +60,28 @@ export default async function(req) {
       client_state: String(client_state).trim(),
       appointment_type: appointment_type || "session",
       status: status || "pending",
+      language: lang,
     });
 
     // For free calls, send confirmation emails server-side (anonymous visitors
     // have no client-side permissions to send email, so this must run here).
     if (appointment_type === "free_call") {
-      const dateObj = new Date(date + "T00:00:00");
-      const dateFormatted = dateObj.toLocaleDateString("en-US", {
-        weekday: "long",
-        month: "long",
-        day: "numeric",
-        year: "numeric",
-      });
-
+      const adminMail = freeCallAdminEmail(
+        String(client_name).trim(), date, time_slot,
+        String(client_email).trim(), String(client_phone).trim(), String(client_state).trim(),
+        lang
+      );
       await sendResendEmail({
         to: "Newtritious.life@gmail.com",
-        subject: `New Free Call Booking: ${client_name} — ${dateFormatted} at ${time_slot}`,
-        text: `New Free Call Booking Alert:\n\n${client_name} has scheduled a free 15-minute discovery call for ${dateFormatted} at ${time_slot}.\nEmail: ${client_email}\nPhone: ${client_phone}\nState: ${client_state}`,
+        subject: adminMail.subject,
+        text: adminMail.text,
       });
 
+      const clientMail = freeCallClientEmail(String(client_name).trim(), date, time_slot, lang);
       await sendResendEmail({
         to: client_email,
-        subject: `Confirmed: Your 15-Minute Discovery Call with NewTritious Life`,
-        text: `Hi ${client_name},\n\nYour free 15-minute discovery call is officially booked! I'm looking forward to connecting with you, hearing about your goals, and seeing how we can best support your health journey.\n\nCall Details:\n• Date: ${dateFormatted}\n• Time: ${time_slot} EST\n• Where: Google Meet (Secure Video Link)\n\n👉 Join Video Call: meet.google.com/abc-defg-hij\n\nNeed to reschedule or cancel? Email Newtritious.life@gmail.com to adjust or cancel your appointment.\n\nWarmly,\nYael Laniado, MS, RD, LD/N\nNewTritious Life LLC`,
+        subject: clientMail.subject,
+        text: clientMail.text,
       });
     }
 
