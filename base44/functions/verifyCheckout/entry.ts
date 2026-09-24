@@ -77,7 +77,7 @@ You will receive a reminder email 24 hours before our meeting that will include 
 If you have any questions, feel free to reply to this email. I look forward to working with you!
 
 Warmly,
-Yael Laniado, RD
+Yael Laniado, MS, RD, LD/N
 NewTritious Life LLC`;
 
       await sendResendEmail({

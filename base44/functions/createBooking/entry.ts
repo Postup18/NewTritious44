@@ -78,7 +78,7 @@ export default async function(req) {
       await sendResendEmail({
         to: client_email,
         subject: `Confirmed: Your 15-Minute Discovery Call with NewTritious Life`,
-        text: `Hi ${client_name},\n\nYour free 15-minute discovery call is officially booked! I'm looking forward to connecting with you, hearing about your goals, and seeing how we can best support your health journey.\n\nCall Details:\n• Date: ${dateFormatted}\n• Time: ${time_slot} EST\n• Where: Google Meet (Secure Video Link)\n\n👉 Join Video Call: meet.google.com/abc-defg-hij\n\nNeed to reschedule or cancel? Email Newtritious.life@gmail.com to adjust or cancel your appointment.\n\nWarmly,\nYael Laniado, RD\nNewTritious Life LLC`,
+        text: `Hi ${client_name},\n\nYour free 15-minute discovery call is officially booked! I'm looking forward to connecting with you, hearing about your goals, and seeing how we can best support your health journey.\n\nCall Details:\n• Date: ${dateFormatted}\n• Time: ${time_slot} EST\n• Where: Google Meet (Secure Video Link)\n\n👉 Join Video Call: meet.google.com/abc-defg-hij\n\nNeed to reschedule or cancel? Email Newtritious.life@gmail.com to adjust or cancel your appointment.\n\nWarmly,\nYael Laniado, MS, RD, LD/N\nNewTritious Life LLC`,
       });
     }
 
