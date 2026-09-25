@@ -1,31 +1,45 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
+import { useAuth } from "@/lib/AuthContext";
 import { ArrowLeft, Send, Leaf } from "lucide-react";
 import MessageBubble from "@/components/chat/MessageBubble";
 
 export default function IntakeChat() {
   const navigate = useNavigate();
+  const { isAuthenticated, isLoadingAuth } = useAuth();
   const [conversation, setConversation] = useState(null);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const bottomRef = useRef(null);
 
-  // Start a new conversation on mount
+  // Start a new conversation once auth is resolved and user is logged in
   useEffect(() => {
+    if (isLoadingAuth) return; // wait for auth to resolve
+    if (!isAuthenticated) {
+      base44.auth.redirectToLogin(window.location.href);
+      return;
+    }
     const init = async () => {
-      const conv = await base44.agents.createConversation({
-        agent_name: "intake_assistant",
-        metadata: { name: "Nutrition Intake" },
-      });
-      setConversation(conv);
-      setMessages(conv.messages || []);
-      setLoading(false);
+      try {
+        const conv = await base44.agents.createConversation({
+          agent_name: "intake_assistant",
+          metadata: { name: "Nutrition Intake" },
+        });
+        setConversation(conv);
+        setMessages(conv.messages || []);
+      } catch (err) {
+        console.error("Failed to start intake conversation:", err);
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
     };
     init();
-  }, []);
+  }, [isLoadingAuth, isAuthenticated]);
 
   // Subscribe to real-time updates
   useEffect(() => {
@@ -85,9 +99,22 @@ export default function IntakeChat() {
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 pb-4 max-w-2xl w-full mx-auto space-y-4">
-        {loading ? (
+        {loading || isLoadingAuth ? (
           <div className="flex justify-center pt-20">
             <div className="w-6 h-6 rounded-full border-2 border-t-transparent animate-spin" style={{ borderColor: "#87a96b", borderTopColor: "transparent" }} />
+          </div>
+        ) : error ? (
+          <div className="flex flex-col items-center justify-center pt-20 text-center px-4">
+            <p className="text-sm text-gray-600 mb-4 max-w-sm">
+              The intake assistant couldn't be reached right now. Please make sure you're logged in and try again.
+            </p>
+            <button
+              onClick={() => navigate("/")}
+              className="px-5 py-2.5 rounded-full text-sm font-semibold text-white"
+              style={{ backgroundColor: "#87a96b" }}
+            >
+              Back to Home
+            </button>
           </div>
         ) : (
           messages.map((msg, i) => <MessageBubble key={i} message={msg} />)
