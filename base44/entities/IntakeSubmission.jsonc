@@ -1,0 +1,71 @@
+{
+  "name": "IntakeSubmission",
+  "type": "object",
+  "properties": {
+    "client_name": {
+      "type": "string",
+      "description": "Full name of the client"
+    },
+    "client_email": {
+      "type": "string",
+      "description": "Email address of the client"
+    },
+    "client_phone": {
+      "type": "string",
+      "description": "Phone number of the client"
+    },
+    "client_state": {
+      "type": "string",
+      "description": "State where the client is located"
+    },
+    "primary_goal": {
+      "type": "string",
+      "description": "Main health or nutrition goal"
+    },
+    "past_approaches": {
+      "type": "string",
+      "description": "Approaches, diets, or strategies tried in the past"
+    },
+    "dietary_preferences": {
+      "type": "string",
+      "description": "Food preferences, daily routines, and allergies"
+    },
+    "medical_history": {
+      "type": "string",
+      "description": "Medical conditions, diagnoses, medications, and supplements"
+    },
+    "language": {
+      "type": "string",
+      "enum": [
+        "en",
+        "es"
+      ],
+      "default": "en",
+      "description": "Language the client was using when submitting"
+    }
+  },
+  "required": [
+    "client_name",
+    "client_email",
+    "client_state",
+    "primary_goal"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
