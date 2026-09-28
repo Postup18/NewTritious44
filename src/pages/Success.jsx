@@ -16,13 +16,14 @@ import {
   Home,
 } from "lucide-react";
 import { format, parseISO } from "date-fns";
+import { es as esLocale } from "date-fns/locale";
 import { base44 } from "@/api/base44Client";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useLanguage } from "@/lib/i18n";
 
 export default function Success() {
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [searchParams] = useSearchParams();
   const sessionId = searchParams.get("session_id");
   const [loading, setLoading] = useState(true);
@@ -69,7 +70,7 @@ export default function Success() {
 
   let dateFormatted = "";
   if (appointment?.date) {
-    try { dateFormatted = format(parseISO(appointment.date), "EEEE, MMMM d, yyyy"); } catch {}
+    try { dateFormatted = format(parseISO(appointment.date), "EEEE, MMMM d, yyyy", { locale: lang === "es" ? esLocale : undefined }); } catch {}
   }
 
   const Header = () => (

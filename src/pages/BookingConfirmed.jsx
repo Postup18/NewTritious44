@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Calendar as CalendarIcon, Clock, CreditCard, ClipboardList, ArrowRight, Leaf, ArrowLeft, User, Mail, Phone, MapPin, CheckCircle, AlertCircle } from "lucide-react";
 import { format, parseISO } from "date-fns";
+import { es as esLocale } from "date-fns/locale";
 import { base44 } from "@/api/base44Client";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/lib/i18n";
 
 export default function BookingConfirmed() {
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [appointment, setAppointment] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -37,7 +38,7 @@ export default function BookingConfirmed() {
 
   let dateFormatted = "";
   if (appointment?.date) {
-    try { dateFormatted = format(parseISO(appointment.date), "EEEE, MMMM d, yyyy"); } catch {}
+    try { dateFormatted = format(parseISO(appointment.date), "EEEE, MMMM d, yyyy", { locale: lang === "es" ? esLocale : undefined }); } catch {}
   }
 
   if (loading) {

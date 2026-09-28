@@ -633,6 +633,7 @@ export default function BookSession() {
         packageId: pendingRetry.packageId,
         appointmentId: pendingRetry.appointmentId,
         origin: window.location.origin,
+        language: lang,
       });
       const url = checkoutResponse.data?.url;
       if (url) {
@@ -710,6 +711,7 @@ export default function BookSession() {
         packageId: selectedPackage,
         appointmentId,
         origin: window.location.origin,
+        language: lang,
       });
       const url = checkoutResponse.data?.url;
       if (url) {
