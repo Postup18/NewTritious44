@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Calendar as CalendarIcon, Clock, CheckCircle, Leaf, ArrowLeft, User, Mail, Phone, MapPin, Video } from "lucide-react";
 import { format, isBefore, startOfDay } from "date-fns";
+import { es as esLocale } from "date-fns/locale";
 import { base44 } from "@/api/base44Client";
 import { Calendar } from "@/components/ui/calendar";
 import { useNavigate } from "react-router-dom";
@@ -22,7 +23,7 @@ const isUnavailableDay = (date) => {
 };
 
 // ─── Step 1: Selection ───────────────────────────────────────────────────────
-function SelectionStep({ onConfirm, t }) {
+function SelectionStep({ onConfirm, t, lang }) {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [bookedSlots, setBookedSlots] = useState([]);
@@ -96,7 +97,7 @@ function SelectionStep({ onConfirm, t }) {
                 <div className="flex items-center gap-2 mb-4">
                   <Clock className="w-4 h-4" style={{ color: "#87a96b" }} />
                   <h2 className="font-heading text-xs font-semibold uppercase tracking-wider" style={{ color: "#87a96b" }}>
-                    {t.freeCall.availableTimes} · {format(selectedDate, "EEEE, MMMM d")}
+                    {t.freeCall.availableTimes} · {format(selectedDate, "EEEE, MMMM d", { locale: lang === "es" ? esLocale : undefined })}
                   </h2>
                 </div>
                 {loadingSlots ? (
@@ -158,7 +159,7 @@ function SelectionStep({ onConfirm, t }) {
                   className="rounded-xl px-4 py-3 text-sm font-medium"
                   style={{ backgroundColor: "#f0f5ec", color: "#5a7a47" }}
                 >
-                  📅 {format(selectedDate, "MMMM d, yyyy")} · {selectedSlot}
+                  📅 {format(selectedDate, "MMMM d, yyyy", { locale: lang === "es" ? esLocale : undefined })} · {selectedSlot}
                 </motion.div>
               )}
             </AnimatePresence>
@@ -266,7 +267,7 @@ function ProcessingStep({ t }) {
 }
 
 // ─── Step 3: Confirmation ─────────────────────────────────────────────────────
-function ConfirmationStep({ selectedDate, selectedSlot, form, onReset, t }) {
+function ConfirmationStep({ selectedDate, selectedSlot, form, onReset, t, lang }) {
   const navigate = useNavigate();
   return (
     <div className="flex items-center justify-center min-h-[70vh] px-4">
@@ -299,7 +300,7 @@ function ConfirmationStep({ selectedDate, selectedSlot, form, onReset, t }) {
               <CalendarIcon className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: "#87a96b" }} />
               <span className="text-sm font-medium text-gray-800">
                 <span className="text-gray-500">{t.freeCall.dateTime}</span>{" "}
-                {format(selectedDate, "EEEE, MMMM d")} at {selectedSlot} EST
+                {format(selectedDate, "EEEE, MMMM d", { locale: lang === "es" ? esLocale : undefined })} {lang === "es" ? "a las" : "at"} {selectedSlot} EST
               </span>
             </div>
             <div className="flex items-start gap-3">
@@ -418,7 +419,7 @@ export default function FreeCall() {
       <AnimatePresence mode="wait">
         {step === "selection" && (
           <motion.div key="selection" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            <SelectionStep onConfirm={handleConfirm} t={t} />
+            <SelectionStep onConfirm={handleConfirm} t={t} lang={lang} />
           </motion.div>
         )}
         {step === "processing" && (
@@ -434,6 +435,7 @@ export default function FreeCall() {
               form={booking.form}
               onReset={handleReset}
               t={t}
+              lang={lang}
             />
           </motion.div>
         )}
