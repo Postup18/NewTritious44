@@ -27,7 +27,7 @@ Detalles de la Llamada:
 • Hora: ${time_slot} EST
 • Donde: Google Meet (Enlace de Video Seguro)
 
-👉 Unirse a la Videollamada: meet.google.com/abc-defg-hij
+👉 24 horas antes de la llamada, recibirás un correo con un enlace para unirte a nuestra videollamada.
 
 ¿Necesitas reprogramar o cancelar? Envía un correo a Newtritious.life@gmail.com para ajustar o cancelar tu cita.
 
@@ -47,7 +47,7 @@ Call Details:
 • Time: ${time_slot} EST
 • Where: Google Meet (Secure Video Link)
 
-👉 Join Video Call: meet.google.com/abc-defg-hij
+👉 24 hours before the call, you will receive an email with a link to join our video call.
 
 Need to reschedule or cancel? Email Newtritious.life@gmail.com to adjust or cancel your appointment.
 
