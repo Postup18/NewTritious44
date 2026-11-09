@@ -7,6 +7,8 @@ const PACKAGES: Record<string, { name: string; amount: number }> = {
   kickstart: { name: "Kickstart Consultation", amount: 17500 },
   habit_builder: { name: "90-Day Habit Builder", amount: 52500 },
   vip_deep_dive: { name: "VIP Deep Dive", amount: 95000 },
+  // Temporary $1 service used to verify live card payments. Remove when done testing.
+  test_dollar: { name: "$1 Test Service", amount: 100 },
 };
 
 export default async function(req: Request): Promise<Response> {
