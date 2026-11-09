@@ -15,7 +15,7 @@ export default async function(req: Request): Promise<Response> {
   try {
     const base44 = createClientFromRequest(req);
     const body = await req.json();
-    const { packageId, appointmentId, origin, language } = body || {};
+    const { packageId, appointmentId, language } = body || {};
 
     if (!packageId || !PACKAGES[packageId]) {
       return Response.json({ error: "Invalid package selected." }, { status: 400 });
@@ -31,14 +31,19 @@ export default async function(req: Request): Promise<Response> {
     }
 
     const pkg = PACKAGES[packageId];
-    const baseUrl = origin || "https://nurture-flow-diet.base44.app";
+    const appUrlHeader = req.headers.get("X-Base44-App-Url");
+    if (!appUrlHeader) {
+      console.error("createCheckoutSession: X-Base44-App-Url header missing");
+      return Response.json({ error: "Payment is not available right now." }, { status: 500 });
+    }
+    const baseUrl = appUrlHeader.replace(/\/+$/, "");
     const appId = secrets.get("BASE44_APP_ID") || "";
     const locale = language === "es" ? "es" : "en";
 
     const params = new URLSearchParams();
     params.append("mode", "payment");
     params.append("locale", locale);
-    params.append("payment_method_configuration", "pmc_1UIYXEGcjxebiOVK0ZBEv41A");
+    params.append("payment_method_types[0]", "card");
     params.append("success_url", `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}`);
     params.append("cancel_url", `${baseUrl}/book-session?checkout=cancelled`);
     params.append("line_items[0][quantity]", "1");

@@ -623,37 +623,48 @@ export default function BookSession() {
 
   const handleRetryCheckout = async () => {
     if (!pendingRetry) return;
-    if (window.self !== window.top) {
-      setBookingError("Checkout works only from the published app. Please open the app in a new tab.");
+
+    const isFramed = window.self !== window.top;
+    const checkoutTab = isFramed ? window.open("", "_blank") : null;
+    if (isFramed && !checkoutTab) {
+      setBookingError("Allow popups to continue to checkout.");
       return;
     }
+    if (checkoutTab) checkoutTab.opener = null;
+
     setStep("processing");
     try {
       const checkoutResponse = await base44.functions.invoke("createCheckoutSession", {
         packageId: pendingRetry.packageId,
         appointmentId: pendingRetry.appointmentId,
-        origin: window.location.origin,
         language: lang,
       });
       const url = checkoutResponse.data?.url;
       if (url) {
-        window.location.href = url;
+        if (checkoutTab) checkoutTab.location.replace(url);
+        else window.location.assign(url);
       } else {
-        setBookingError("Couldn't restart checkout. Please try booking again.");
+        checkoutTab?.close();
+        setBookingError(checkoutResponse.data?.error || "Couldn't restart checkout. Please try booking again.");
         setStep("selection");
       }
     } catch (err) {
+      checkoutTab?.close();
       setBookingError("Couldn't restart checkout. Please try booking again.");
       setStep("selection");
     }
   };
 
   const handleConfirm = async ({ selectedDate, selectedSlot, form, selectedPackage, paymentMethod }) => {
-    // Block checkout inside the builder iframe preview
-    if (window.self !== window.top) {
-      setBookingError("Checkout works only from the published app. Please open the app in a new tab to complete your booking.");
+    // Open the checkout tab now, while the click still counts as a user gesture,
+    // so popup blockers allow it when the app runs framed in the preview.
+    const isFramed = window.self !== window.top;
+    const checkoutTab = isFramed ? window.open("", "_blank") : null;
+    if (isFramed && !checkoutTab) {
+      setBookingError("Allow popups to continue to checkout.");
       return;
     }
+    if (checkoutTab) checkoutTab.opener = null;
 
     setBooking({ selectedDate, selectedSlot, form, selectedPackage });
     setBookingError(null);
@@ -676,16 +687,19 @@ export default function BookSession() {
       if (response.data?.success) {
         appointmentId = response.data.appointmentId;
       } else if (response.status === 409) {
+        checkoutTab?.close();
         setBookingError("The time you selected was just booked by someone else. Please choose another time.");
         setStep("selection");
         return;
       } else {
+        checkoutTab?.close();
         setBookingError(response.data?.error || "We couldn't complete your booking right now. Please try again.");
         setStep("selection");
         return;
       }
     } catch (err) {
       const status = err?.response?.status;
+      checkoutTab?.close();
       if (status === 409) {
         setBookingError("The time you selected was just booked by someone else. Please choose another time.");
       } else {
@@ -697,6 +711,7 @@ export default function BookSession() {
 
     // Venmo path: skip Stripe, show Venmo instructions instead
     if (paymentMethod === "venmo") {
+      checkoutTab?.close();
       setBooking({ selectedDate, selectedSlot, form, selectedPackage, paymentMethod });
       setStep("venmo_instructions");
       return;
@@ -710,18 +725,20 @@ export default function BookSession() {
       const checkoutResponse = await base44.functions.invoke("createCheckoutSession", {
         packageId: selectedPackage,
         appointmentId,
-        origin: window.location.origin,
         language: lang,
       });
       const url = checkoutResponse.data?.url;
       if (url) {
-        window.location.href = url;
+        if (checkoutTab) checkoutTab.location.replace(url);
+        else window.location.assign(url);
       } else {
+        checkoutTab?.close();
         setBookingError(checkoutResponse.data?.error || "Couldn't start secure checkout. Please try again.");
         setStep("selection");
       }
     } catch (err) {
       console.warn("Checkout session failed:", err);
+      checkoutTab?.close();
       setBookingError("Couldn't start secure checkout. Please try again.");
       setStep("selection");
     }
