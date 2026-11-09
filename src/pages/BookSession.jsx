@@ -124,7 +124,7 @@ function SelectionStep({ onConfirm, t, bookingError, onDismissError, pendingRetr
             {t.bookSession.choosePackage}
           </h2>
         </div>
-        <div className="grid sm:grid-cols-3 gap-4">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {t.bookSession.packages.map((pkg) => {
             const active = selectedPackage === pkg.id;
             return (
